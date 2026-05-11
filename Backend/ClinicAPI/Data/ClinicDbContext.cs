@@ -1,5 +1,6 @@
 using ClinicAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ClinicAPI.Data;
 
@@ -28,15 +29,21 @@ public class ClinicDbContext : DbContext
 
         modelBuilder.Entity<Appointment>()
             .HasOne(a => a.Doctor)
-            .WithMany()
+            .WithMany(d => d.Appointments)
             .HasForeignKey(a => a.DoctorId)
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Appointment>()
             .HasOne(a => a.Clinic)
-            .WithMany()
+            .WithMany(c => c.Appointments)
             .HasForeignKey(a => a.ClinicId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<Clinic>().HasData(
+            new Clinic{ Id = 1, Name = "First Clinic"},
+            new Clinic{ Id = 2, Name = "Second Clinic"},
+            new Clinic{ Id = 3, Name = "Third Clinic"}
+        );
     }
 
 }

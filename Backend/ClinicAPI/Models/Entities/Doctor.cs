@@ -11,6 +11,7 @@ public class Doctor
     public int ClinicId { get; set; }
     public Speciality Speciality { get; set; }
     public Clinic Clinic { get; set; }
+    public ICollection<Appointment> Appointments { get; set; }
 
 
 

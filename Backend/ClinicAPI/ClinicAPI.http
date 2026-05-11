@@ -1,6 +1,155 @@
 @ClinicAPI_HostAddress = http://localhost:5074
 
-GET {{ClinicAPI_HostAddress}}/weatherforecast/
+GET {{ClinicAPI_HostAddress}}/api/v1/clinics
 Accept: application/json
 
 ###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/clinics/2
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/clinics/999999999
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/clinics/-1
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/clinics/a
+Accept: application/json
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/clinics/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Test Clinic"
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/clinics/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": 999999
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/clinics/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Test CLinic",
+    "field": "Not an existing field"
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/clinics/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": ""
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/clinics/
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Updated Clinic"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/999999999
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Updated Clinic"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/-1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Updated Clinic"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/a
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Updated Clinic"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": ""
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/1
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/clinics/1
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/clinics/999999999
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/clinics/-1
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/clinics/a
+Accept: application/json

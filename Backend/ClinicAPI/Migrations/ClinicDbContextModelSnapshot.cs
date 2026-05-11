@@ -93,6 +93,23 @@ namespace ClinicAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clinic");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "First Clinic"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Second Clinic"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Third Clinic"
+                        });
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.Doctor", b =>
@@ -205,13 +222,13 @@ namespace ClinicAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("ClinicAPI.Models.Entities.Clinic", "Clinic")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("ClinicId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ClinicAPI.Models.Entities.Doctor", "Doctor")
-                        .WithMany()
+                        .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -234,7 +251,7 @@ namespace ClinicAPI.Migrations
             modelBuilder.Entity("ClinicAPI.Models.Entities.Doctor", b =>
                 {
                     b.HasOne("ClinicAPI.Models.Entities.Clinic", "Clinic")
-                        .WithMany()
+                        .WithMany("Doctors")
                         .HasForeignKey("ClinicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -248,6 +265,18 @@ namespace ClinicAPI.Migrations
                     b.Navigation("Clinic");
 
                     b.Navigation("Speciality");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.Entities.Clinic", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.Entities.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.Patient", b =>

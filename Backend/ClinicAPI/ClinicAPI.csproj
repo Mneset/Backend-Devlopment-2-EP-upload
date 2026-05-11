@@ -17,9 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Models\Dtos\AppointmentCategory\" />
+    <Folder Include="Models\Dtos\Clinic\" />
     <Folder Include="Models\Entities\" />
+    <Folder Include="Services\AppointmentCategories\" />
+    <Folder Include="Services\Clinics\" />
+    <Folder Include="Services\Specialtities\" />
   </ItemGroup>
 
 </Project>

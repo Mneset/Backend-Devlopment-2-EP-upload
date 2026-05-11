@@ -1,4 +1,7 @@
 using ClinicAPI.Data;
+using ClinicAPI.Services.AppointmentCategories;
+using ClinicAPI.Services.Clinics;
+using ClinicAPI.Services.Specialtities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,13 @@ builder.Services.AddDbContext<ClinicDbContext>(
     )
 );
 
+builder.Services.AddScoped<IClinicService, ClinicService>();
+
+builder.Services.AddScoped<ISpecialityService, SpecialityService>();
+
+builder.Services.AddScoped<IAppointmentCategoryService, AppointmentCategoryService>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,3 +41,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }
