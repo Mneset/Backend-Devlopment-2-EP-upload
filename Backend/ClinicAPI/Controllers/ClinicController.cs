@@ -18,7 +18,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClinicResponseDto>>> GetallClinics()
+        public async Task<ActionResult<IEnumerable<ClinicResponseDto>>> GetAllClinics()
         {
             var clinics = await _clinicService.GetAllAsync();
             return Ok(clinics);
@@ -61,12 +61,18 @@ namespace ClinicAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateClinicById(int id, [FromBody] UpdateClinicRequestDto clinicData)
         {
-            if(! await _clinicService.Exists(id))
+
+            if(id != clinicData.Id)
+            {
+                return BadRequest("Id in route does not match the Id in the request body");
+            }
+
+            if(! await _clinicService.Exists(clinicData.Id))
             {
                 return NotFound();
             }
 
-            await _clinicService.UpdateClinic(id, clinicData);
+            await _clinicService.UpdateClinic(clinicData);
             return NoContent();
         }
 

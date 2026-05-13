@@ -7,6 +7,6 @@ public interface ISpecialityService : IBaseService< SpecialityResponseDto, int >
 {
     public Task<bool> Exists(int id);
     public Task<SpecialityResponseDto> AddSpeciality(CreateSpecialityRequestDto request);
-    public Task<SpecialityResponseDto> UpdateSpeciality(int id, UpdateSpecialityRequestDto request);
+    public Task UpdateSpeciality(UpdateSpecialityRequestDto request);
     public Task DeleteSpeciality(int id);
 }

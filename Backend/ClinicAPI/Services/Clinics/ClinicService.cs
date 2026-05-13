@@ -46,9 +46,9 @@ public class ClinicService : IClinicService
        await _context.Clinic.Where(c => c.Id ==id ).ExecuteDeleteAsync();
     }
 
-    public async Task UpdateClinic(int id, UpdateClinicRequestDto clinic)
+    public async Task UpdateClinic(UpdateClinicRequestDto clinic)
     {
-        var entity = await _context.Clinic.FirstAsync(c => c.Id == id);
+        var entity = await _context.Clinic.FirstAsync(c => c.Id == clinic.Id);
         entity.Name = clinic.Name;
         await _context.SaveChangesAsync();
     }

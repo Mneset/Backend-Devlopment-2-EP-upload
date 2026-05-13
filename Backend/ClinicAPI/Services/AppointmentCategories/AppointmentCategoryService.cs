@@ -1,37 +1,57 @@
 using System;
+using ClinicAPI.Data;
 using ClinicAPI.Models.Dtos.AppointmentCategory;
+using ClinicAPI.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+
+
 
 namespace ClinicAPI.Services.AppointmentCategories;
 
 public class AppointmentCategoryService : IAppointmentCategoryService
 {
+     private readonly ClinicDbContext _context;
 
-     public Task<bool> Exists(int id)
+        public AppointmentCategoryService(ClinicDbContext context)
+        {
+            _context = context;
+        }
+
+     public async Task<bool> Exists(int id)
     {
-        throw new NotImplementedException();
+        return await _context.AppointmentCategories.AnyAsync(ac => ac.Id == id);
     }
 
-    public Task<IEnumerable<AppointmentCategoryResponseDto>> GetAllAsync()
+    public async Task<IEnumerable<AppointmentCategoryResponseDto>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.AppointmentCategories
+            .Select(ac => new AppointmentCategoryResponseDto {Id = ac.Id, Name = ac.Name })
+            .ToListAsync();
     }
 
-    public Task<AppointmentCategoryResponseDto> GetByIdAsync(int id)
+    public async Task<AppointmentCategoryResponseDto?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var entity = await _context.AppointmentCategories.FirstOrDefaultAsync(ac => ac.Id == id);
+        if(entity == null) return null;
+        return new AppointmentCategoryResponseDto { Id = entity.Id, Name = entity.Name };
     }
-    public Task<AppointmentCategoryResponseDto> AddClinic(CreateAppointmentCategoryRequestDto request)
+    public async Task<AppointmentCategoryResponseDto> AddAppointmentCategory(CreateAppointmentCategoryRequestDto appointmentCategoryData)
     {
-        throw new NotImplementedException();
+        var entity = new AppointmentCategory { Name = appointmentCategoryData.Name };
+       _context.AppointmentCategories.Add(entity);
+       await _context.SaveChangesAsync();
+       return new AppointmentCategoryResponseDto { Id = entity.Id, Name = entity.Name };
     }
 
-    public Task DeleteClinic(int id)
+    public async Task DeleteAppointmentCategory(int id)
     {
-        throw new NotImplementedException();
+            await _context.AppointmentCategories.Where(ac => ac.Id == id ).ExecuteDeleteAsync();
     }
 
-    public Task<AppointmentCategoryResponseDto> UpdateClinic(int id, UpdateAppointmentCategoryRequestDto request)
+    public async Task UpdateAppointmentCategory(UpdateAppointmentCategoryRequestDto appointmentCategoryData)
     {
-        throw new NotImplementedException();
+        var entity = await _context.AppointmentCategories.FirstAsync(ac => ac.Id == appointmentCategoryData.Id);
+        entity.Name = appointmentCategoryData.Name;
+        await _context.SaveChangesAsync();
     }
 }

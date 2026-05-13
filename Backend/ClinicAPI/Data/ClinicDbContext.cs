@@ -40,9 +40,26 @@ public class ClinicDbContext : DbContext
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Clinic>().HasData(
-            new Clinic{ Id = 1, Name = "First Clinic"},
-            new Clinic{ Id = 2, Name = "Second Clinic"},
-            new Clinic{ Id = 3, Name = "Third Clinic"}
+            new Clinic { Id = 1, Name = "Oslo University Hospital" },
+            new Clinic { Id = 2, Name = "Ullevål Medical Center" },
+            new Clinic { Id = 3, Name = "Rikshospitalet Clinic" },
+            new Clinic { Id = 4, Name = "Drammen Health Clinic" },
+            new Clinic { Id = 5, Name = "Ahus Outpatient Clinic" }
+        );
+
+        modelBuilder.Entity<Speciality>().HasData(
+            new Speciality { Id = 1, Name = "Cardiology" },
+            new Speciality { Id = 2, Name = "Dermatology" },
+            new Speciality { Id = 3, Name = "Neurology" },
+            new Speciality { Id = 4, Name = "Orthopedics" }
+        );
+
+        modelBuilder.Entity<AppointmentCategory>().HasData(
+            new AppointmentCategory { Id = 1, Name = "General Checkup" },
+            new AppointmentCategory { Id = 2, Name = "Follow-up Consultation" },
+            new AppointmentCategory { Id = 3, Name = "Specialist Referral" },
+            new AppointmentCategory { Id = 4, Name = "Vaccination" },
+            new AppointmentCategory { Id = 5, Name = "Lab Test" }
         );
     }
 

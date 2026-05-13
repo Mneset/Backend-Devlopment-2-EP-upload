@@ -76,11 +76,12 @@ Content-Type: application/json
 
 ###
 
-PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/1
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/3
 Accept: application/json
 Content-Type: application/json
 
 {
+    "id": 3,
     "name": "Updated Clinic"
 }
 
@@ -91,6 +92,18 @@ Accept: application/json
 Content-Type: application/json
 
 {
+    "id": 999999999,
+    "name": "Updated Clinic"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/clinics/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 3,
     "name": "Updated Clinic"
 }
 
@@ -101,6 +114,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
+    "id": -1,
     "name": "Updated Clinic"
 }
 
@@ -111,6 +125,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
+    "id": "a",
     "name": "Updated Clinic"
 }
 
@@ -152,4 +167,346 @@ Accept: application/json
 ###
 
 DELETE {{ClinicAPI_HostAddress}}/api/v1/clinics/a
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/specialities
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/specialities/2
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/specialities/999999999
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/specialities/-1
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/specialities/a
+Accept: application/json
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/specialities
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Cardiology"
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/specialities
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": 999999
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/specialities
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Cardiology",
+    "field": "Not an existing field"
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/specialities
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": ""
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/specialities
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/specialities/3
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 3,
+    "name": "Updated Speciality"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/specialities/999999999
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 999999999,
+    "name": "Updated Speciality"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/specialities/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 3,
+    "name": "Updated Speciality"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/specialities/-1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": -1,
+    "name": "Updated Speciality"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/specialities/a
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": "a",
+    "name": "Updated Speciality"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/specialities/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": ""
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/specialities/1
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/specialities/1
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/specialities/999999999
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/specialities/-1
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/specialities/a
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/2
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/999999999
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/-1
+Accept: application/json
+
+###
+
+GET {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/a
+Accept: application/json
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "General Checkup"
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": 999999
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "General Checkup",
+    "field": "Not an existing field"
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": ""
+}
+
+###
+
+POST {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/3
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 3,
+    "name": "Updated Category"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/999999999
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 999999999,
+    "name": "Updated Category"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": 3,
+    "name": "Updated Category"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/-1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": -1,
+    "name": "Updated Category"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/a
+Accept: application/json
+Content-Type: application/json
+
+{
+    "id": "a",
+    "name": "Updated Category"
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": ""
+}
+
+###
+
+PUT {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/1
+Accept: application/json
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/1
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/999999999
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/-1
+Accept: application/json
+
+###
+
+DELETE {{ClinicAPI_HostAddress}}/api/v1/appointmentcategories/a
 Accept: application/json
