@@ -48,6 +48,9 @@ namespace ClinicAPI.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentCategoryId");
@@ -59,6 +62,41 @@ namespace ClinicAPI.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Appointments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 6, 10, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 1,
+                            DoctorId = 1,
+                            DurationInMin = 30,
+                            PatientId = 1,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AppointmentCategoryId = 2,
+                            AppointmentDate = new DateTime(2026, 6, 11, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 2,
+                            DoctorId = 2,
+                            DurationInMin = 45,
+                            PatientId = 2,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AppointmentCategoryId = 3,
+                            AppointmentDate = new DateTime(2026, 5, 1, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 3,
+                            DoctorId = 3,
+                            DurationInMin = 60,
+                            PatientId = 1,
+                            Status = 1
+                        });
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.AppointmentCategory", b =>
@@ -76,6 +114,33 @@ namespace ClinicAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppointmentCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "General Checkup"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Follow-up Consultation"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Specialist Referral"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Vaccination"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Lab Test"
+                        });
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.Clinic", b =>
@@ -85,6 +150,9 @@ namespace ClinicAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -98,17 +166,32 @@ namespace ClinicAPI.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "First Clinic"
+                            IsActive = true,
+                            Name = "Oslo University Hospital"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Second Clinic"
+                            IsActive = true,
+                            Name = "Ullevål Medical Center"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Third Clinic"
+                            IsActive = true,
+                            Name = "Rikshospitalet Clinic"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsActive = true,
+                            Name = "Drammen Health Clinic"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsActive = true,
+                            Name = "Ahus Outpatient Clinic"
                         });
                 });
 
@@ -127,6 +210,12 @@ namespace ClinicAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -141,6 +230,48 @@ namespace ClinicAPI.Migrations
                     b.HasIndex("SpecialityId");
 
                     b.ToTable("Doctors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClinicId = 1,
+                            FirstName = "Erik",
+                            Gender = 0,
+                            IsActive = true,
+                            LastName = "Hansen",
+                            SpecialityId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClinicId = 2,
+                            FirstName = "Anna",
+                            Gender = 1,
+                            IsActive = true,
+                            LastName = "Olsen",
+                            SpecialityId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClinicId = 3,
+                            FirstName = "Lars",
+                            Gender = 0,
+                            IsActive = true,
+                            LastName = "Berg",
+                            SpecialityId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClinicId = 4,
+                            FirstName = "Sofia",
+                            Gender = 1,
+                            IsActive = true,
+                            LastName = "Dahl",
+                            SpecialityId = 4
+                        });
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.Patient", b =>
@@ -157,17 +288,15 @@ namespace ClinicAPI.Migrations
                     b.Property<string>("DriverLicenseNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsRegistered")
                         .HasColumnType("bit");
@@ -179,11 +308,8 @@ namespace ClinicAPI.Migrations
                     b.Property<string>("MedicalInsuranceNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Religion")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Religion")
+                        .HasColumnType("int");
 
                     b.Property<string>("SocialSecurityNumber")
                         .HasColumnType("nvarchar(max)");
@@ -194,6 +320,38 @@ namespace ClinicAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Patients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateOfBirth = new DateTime(1990, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Jonas",
+                            Gender = 0,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Nilsen"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateOfBirth = new DateTime(1985, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Marie",
+                            Gender = 1,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Andersen"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DateOfBirth = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Guest",
+                            Gender = 0,
+                            IsActive = true,
+                            IsRegistered = false,
+                            LastName = "User"
+                        });
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.Speciality", b =>
@@ -211,6 +369,88 @@ namespace ClinicAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specialities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Cardiology"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Dermatology"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Neurology"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Orthopedics"
+                        });
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@clinic.com",
+                            PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq",
+                            Role = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "jonas@email.com",
+                            PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq",
+                            PatientId = 1,
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "marie@email.com",
+                            PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq",
+                            PatientId = 2,
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "guest@email.com",
+                            PatientId = 3,
+                            Role = 2
+                        });
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.Appointment", b =>
@@ -265,6 +505,15 @@ namespace ClinicAPI.Migrations
                     b.Navigation("Clinic");
 
                     b.Navigation("Speciality");
+                });
+
+            modelBuilder.Entity("ClinicAPI.Models.Entities.User", b =>
+                {
+                    b.HasOne("ClinicAPI.Models.Entities.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("ClinicAPI.Models.Entities.Clinic", b =>

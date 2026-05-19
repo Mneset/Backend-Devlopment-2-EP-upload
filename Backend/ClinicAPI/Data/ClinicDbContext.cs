@@ -10,6 +10,7 @@ public class ClinicDbContext : DbContext
     public DbSet<AppointmentCategory> AppointmentCategories { get; set; }
     public DbSet<Clinic> Clinic { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Speciality> Specialities { get; set; }
 
@@ -20,12 +21,6 @@ public class ClinicDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /*
-            Appoinment links to both Doctor and Clinic, but Doctor also links to Clinic
-            This creates multiple delete paths to Appoinment and SQL Server does not allow that.
-            Therefore I'm defining these two relationships explicitly so i can modify the delete behaviour and disable cascade delete.
-            The rest of the relationships are handled automatically by EF
-        */
 
         modelBuilder.Entity<Appointment>()
             .HasOne(a => a.Doctor)
@@ -40,12 +35,12 @@ public class ClinicDbContext : DbContext
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder.Entity<Clinic>().HasData(
-            new Clinic { Id = 1, Name = "Oslo University Hospital" },
-            new Clinic { Id = 2, Name = "Ullevål Medical Center" },
-            new Clinic { Id = 3, Name = "Rikshospitalet Clinic" },
-            new Clinic { Id = 4, Name = "Drammen Health Clinic" },
-            new Clinic { Id = 5, Name = "Ahus Outpatient Clinic" }
-        );
+           new Clinic { Id = 1, Name = "Oslo University Hospital", IsActive = true },
+           new Clinic { Id = 2, Name = "Ullevål Medical Center", IsActive = true },
+           new Clinic { Id = 3, Name = "Rikshospitalet Clinic", IsActive = true },
+           new Clinic { Id = 4, Name = "Drammen Health Clinic", IsActive = true },
+           new Clinic { Id = 5, Name = "Ahus Outpatient Clinic", IsActive = true }
+       );
 
         modelBuilder.Entity<Speciality>().HasData(
             new Speciality { Id = 1, Name = "Cardiology" },
@@ -60,6 +55,32 @@ public class ClinicDbContext : DbContext
             new AppointmentCategory { Id = 3, Name = "Specialist Referral" },
             new AppointmentCategory { Id = 4, Name = "Vaccination" },
             new AppointmentCategory { Id = 5, Name = "Lab Test" }
+        );
+
+        modelBuilder.Entity<Doctor>().HasData(
+            new Doctor { Id = 1, FirstName = "Erik", LastName = "Hansen", IsActive = true, SpecialityId = 1, ClinicId = 1, Gender = Gender.Male },
+            new Doctor { Id = 2, FirstName = "Anna", LastName = "Olsen", IsActive = true, SpecialityId = 2, ClinicId = 2, Gender = Gender.Female },
+            new Doctor { Id = 3, FirstName = "Lars", LastName = "Berg", IsActive = true, SpecialityId = 3, ClinicId = 3, Gender = Gender.Male },
+            new Doctor { Id = 4, FirstName = "Sofia", LastName = "Dahl", IsActive = true, SpecialityId = 4, ClinicId = 4, Gender = Gender.Female }
+        );
+
+        modelBuilder.Entity<Patient>().HasData(
+            new Patient { Id = 1, FirstName = "Jonas", LastName = "Nilsen", Gender = Gender.Male, DateOfBirth = new DateTime(1990, 5, 15), IsActive = true, IsRegistered = true },
+            new Patient { Id = 2, FirstName = "Marie", LastName = "Andersen", Gender = Gender.Female, DateOfBirth = new DateTime(1985, 3, 22), IsActive = true, IsRegistered = true },
+            new Patient { Id = 3, FirstName = "Guest", LastName = "User", Gender = Gender.Male, DateOfBirth = new DateTime(2000, 1, 1), IsActive = true, IsRegistered = false }
+        );
+
+        modelBuilder.Entity<User>().HasData(
+            new User { Id = 1, Email = "admin@clinic.com", PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq", Role = Role.Admin, PatientId = null },
+            new User { Id = 2, Email = "jonas@email.com", PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq", Role = Role.Patient, PatientId = 1 },
+            new User { Id = 3, Email = "marie@email.com", PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq", Role = Role.Patient, PatientId = 2 },
+            new User { Id = 4, Email = "guest@email.com", PasswordHash = null, Role = Role.Guest, PatientId = 3 }
+        );
+
+        modelBuilder.Entity<Appointment>().HasData(
+            new Appointment { Id = 1, PatientId = 1, DoctorId = 1, ClinicId = 1, AppointmentCategoryId = 1, AppointmentDate = new DateTime(2026, 6, 10, 9, 0, 0), DurationInMin = 30, Status = Status.Scheduled },
+            new Appointment { Id = 2, PatientId = 2, DoctorId = 2, ClinicId = 2, AppointmentCategoryId = 2, AppointmentDate = new DateTime(2026, 6, 11, 10, 0, 0), DurationInMin = 45, Status = Status.Scheduled },
+            new Appointment { Id = 3, PatientId = 1, DoctorId = 3, ClinicId = 3, AppointmentCategoryId = 3, AppointmentDate = new DateTime(2026, 5, 1, 14, 0, 0), DurationInMin = 60, Status = Status.Completed }
         );
     }
 
