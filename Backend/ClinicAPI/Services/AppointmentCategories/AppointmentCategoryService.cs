@@ -22,6 +22,11 @@ public class AppointmentCategoryService : IAppointmentCategoryService
         return await _context.AppointmentCategories.AnyAsync(ac => ac.Id == id);
     }
 
+    public async Task<bool> HasAppointments(int id)
+    {
+        return await _context.Appointments.AnyAsync(a => a.AppointmentCategoryId == id);
+    }
+
     public async Task<IEnumerable<AppointmentCategoryResponseDto>> GetAllAsync()
     {
         return await _context.AppointmentCategories

@@ -1,5 +1,5 @@
 using ClinicAPI.Models.Dtos.Speciality;
-using ClinicAPI.Services.Specialtities;
+using ClinicAPI.Services.Specialities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,11 +44,16 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteteSpecialityById(int id)
+        public async Task<ActionResult> DeleteSpecialityById(int id)
         {
             if(! await _specialityService.Exists(id))
             {
                 return NotFound();
+            }
+
+            if(await _specialityService.HasDoctors(id))
+            {
+                return Conflict("Cannot delete speciality because doctors are assigned to it.");
             }
 
             await _specialityService.DeleteSpeciality(id);

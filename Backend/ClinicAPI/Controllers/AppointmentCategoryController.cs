@@ -17,7 +17,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppointmentCategoryResponseDto>>> GetllAppointmentCategories()
+        public async Task<ActionResult<IEnumerable<AppointmentCategoryResponseDto>>> GetAllAppointmentCategories()
         {
             var appointmentCategories = await _appointmentCategoryService.GetAllAsync();
             return Ok(appointmentCategories);
@@ -45,11 +45,16 @@ namespace ClinicAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAppointMentCategoryById(int id)
+        public async Task<ActionResult> DeleteAppointmentCategoryById(int id)
         {
             if(! await _appointmentCategoryService.Exists(id))
             {
                 return NotFound();
+            }
+
+            if(await _appointmentCategoryService.HasAppointments(id))
+            {
+                return Conflict("Cannot delete appointment category because appointments are assigned to it.");
             }
 
             await _appointmentCategoryService.DeleteAppointmentCategory(id);

@@ -3,7 +3,7 @@ using ClinicAPI.Models.Dtos.Speciality;
 using ClinicAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClinicAPI.Services.Specialtities;
+namespace ClinicAPI.Services.Specialities;
 
 public class SpecialityService : ISpecialityService
 {
@@ -17,7 +17,12 @@ public class SpecialityService : ISpecialityService
     public async Task<bool> Exists(int id)
     {
         return await _context.Specialities.AnyAsync(s => s.Id == id);
-        
+
+    }
+
+    public async Task<bool> HasDoctors(int id)
+    {
+        return await _context.Doctors.AnyAsync(d => d.SpecialityId == id);
     }
 
     public async Task<IEnumerable<SpecialityResponseDto>> GetAllAsync()

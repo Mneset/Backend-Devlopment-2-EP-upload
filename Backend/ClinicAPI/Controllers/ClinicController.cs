@@ -1,7 +1,5 @@
 using ClinicAPI.Models.Dtos.Clinic;
-using ClinicAPI.Models.Entities;
 using ClinicAPI.Services.Clinics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
@@ -24,12 +22,32 @@ namespace ClinicAPI.Controllers
             return Ok(clinics);
         }
 
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<ClinicResponseDto>>> GetAllClinicsIncludingInactive()
+        {
+            var clinics = await _clinicService.GetAllIncludingInactiveAsync();
+            return Ok(clinics);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ClinicResponseDto>> GetClinicById(int id)
         {
             var clinic = await _clinicService.GetByIdAsync(id);
 
-            if(clinic == null)
+            if (clinic == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(clinic);
+        }
+
+        [HttpGet("all/{id}")]
+        public async Task<ActionResult<ClinicResponseDto>> GetClinicByIdIncludingInactive(int id)
+        {
+            var clinic = await _clinicService.GetByIdIncludingInactiveAsync(id);
+
+            if (clinic == null)
             {
                 return NotFound();
             }
@@ -41,18 +59,30 @@ namespace ClinicAPI.Controllers
         public async Task<ActionResult<ClinicResponseDto>> CreateClinic([FromBody] CreateClinicRequestDto clinicData)
         {
             var clinic = await _clinicService.AddClinic(clinicData);
-            return CreatedAtAction(nameof(GetClinicById), new {id = clinic.Id}, clinic);
+            return CreatedAtAction(nameof(GetClinicById), new { id = clinic.Id }, clinic);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteteClinicById(int id)
+        public async Task<ActionResult> DeactivateClinicById(int id)
         {
-            if(! await _clinicService.Exists(id))
+            if (!await _clinicService.Exists(id))
             {
                 return NotFound();
             }
 
-            await _clinicService.DeleteClinic(id);
+            await _clinicService.DeactivateClinic(id);
+            return NoContent();
+        }
+
+        [HttpPatch("{id}/reactivate")]
+        public async Task<ActionResult> ReactivateClinicById(int id)
+        {
+            if (!await _clinicService.Exists(id))
+            {
+                return NotFound();
+            }
+
+            await _clinicService.ReactivateClinic(id);
             return NoContent();
         }
 
@@ -62,12 +92,12 @@ namespace ClinicAPI.Controllers
         public async Task<IActionResult> UpdateClinicById(int id, [FromBody] UpdateClinicRequestDto clinicData)
         {
 
-            if(id != clinicData.Id)
+            if (id != clinicData.Id)
             {
                 return BadRequest("Id in route does not match the Id in the request body");
             }
 
-            if(! await _clinicService.Exists(clinicData.Id))
+            if (!await _clinicService.Exists(clinicData.Id))
             {
                 return NotFound();
             }

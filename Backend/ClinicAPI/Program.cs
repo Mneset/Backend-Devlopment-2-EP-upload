@@ -1,7 +1,8 @@
 using ClinicAPI.Data;
 using ClinicAPI.Services.AppointmentCategories;
 using ClinicAPI.Services.Clinics;
-using ClinicAPI.Services.Specialtities;
+using ClinicAPI.Services.Doctors;
+using ClinicAPI.Services.Specialities;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ builder.Services.AddScoped<IClinicService, ClinicService>();
 builder.Services.AddScoped<ISpecialityService, SpecialityService>();
 
 builder.Services.AddScoped<IAppointmentCategoryService, AppointmentCategoryService>();
+
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 
 var app = builder.Build();

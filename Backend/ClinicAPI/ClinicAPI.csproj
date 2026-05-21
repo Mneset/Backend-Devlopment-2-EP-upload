@@ -24,7 +24,7 @@
     <Folder Include="Models\Entities\" />
     <Folder Include="Services\AppointmentCategories\" />
     <Folder Include="Services\Clinics\" />
-    <Folder Include="Services\Specialtities\" />
+    <Folder Include="Services\Specialities\" />
   </ItemGroup>
 
 </Project>

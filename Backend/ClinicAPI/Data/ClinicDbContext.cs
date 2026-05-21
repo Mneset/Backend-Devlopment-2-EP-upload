@@ -8,7 +8,7 @@ public class ClinicDbContext : DbContext
 {
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<AppointmentCategory> AppointmentCategories { get; set; }
-    public DbSet<Clinic> Clinic { get; set; }
+    public DbSet<Clinic> Clinics { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Patient> Patients { get; set; }
