@@ -34,6 +34,10 @@ public class ClinicDbContext : DbContext
             .HasForeignKey(a => a.ClinicId)
             .OnDelete(DeleteBehavior.NoAction);
 
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
         modelBuilder.Entity<Clinic>().HasData(
            new Clinic { Id = 1, Name = "Oslo University Hospital", IsActive = true },
            new Clinic { Id = 2, Name = "Ullevål Medical Center", IsActive = true },

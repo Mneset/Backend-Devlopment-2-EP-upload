@@ -1,11 +1,13 @@
 using ClinicAPI.Models.Dtos.Clinic;
 using ClinicAPI.Services.Clinics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
 {
     [Route("api/v1/clinics")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class ClinicController : ControllerBase
     {
         private readonly IClinicService _clinicService;
@@ -16,6 +18,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ClinicResponseDto>>> GetAllClinics()
         {
             var clinics = await _clinicService.GetAllAsync();
@@ -30,6 +33,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ClinicResponseDto>> GetClinicById(int id)
         {
             var clinic = await _clinicService.GetByIdAsync(id);

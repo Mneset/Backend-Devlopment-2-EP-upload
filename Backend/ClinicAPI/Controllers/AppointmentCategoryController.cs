@@ -1,5 +1,6 @@
 using ClinicAPI.Models.Dtos.AppointmentCategory;
 using ClinicAPI.Services.AppointmentCategories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace ClinicAPI.Controllers
 {
     [Route("api/v1/appointmentcategories")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class AppointmentCategoryController : ControllerBase
     {
         private readonly IAppointmentCategoryService _appointmentCategoryService;
@@ -17,6 +19,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<AppointmentCategoryResponseDto>>> GetAllAppointmentCategories()
         {
             var appointmentCategories = await _appointmentCategoryService.GetAllAsync();
@@ -24,6 +27,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<AppointmentCategoryResponseDto>> GetAppointmentCategoryById(int id)
         {
             var appointmentCategory = await _appointmentCategoryService.GetByIdAsync(id);

@@ -1,5 +1,6 @@
 using ClinicAPI.Models.Dtos.Speciality;
 using ClinicAPI.Services.Specialities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace ClinicAPI.Controllers
 {
     [Route("api/v1/specialities")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class SpecialityController : ControllerBase
     {
         private readonly ISpecialityService _specialityService;

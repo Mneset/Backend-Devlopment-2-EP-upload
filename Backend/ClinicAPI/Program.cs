@@ -1,9 +1,16 @@
+using System.Text;
 using ClinicAPI.Data;
+using ClinicAPI.Models.Config;
 using ClinicAPI.Services.AppointmentCategories;
+using ClinicAPI.Services.Appointments;
+using ClinicAPI.Services.Auth;
 using ClinicAPI.Services.Clinics;
 using ClinicAPI.Services.Doctors;
+using ClinicAPI.Services.Patients;
 using ClinicAPI.Services.Specialities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +35,41 @@ builder.Services.AddScoped<IAppointmentCategoryService, AppointmentCategoryServi
 
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 
+builder.Services.AddScoped<IPatientService, PatientService>();
+
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+// JWT
+// Configure JWT settings
+var jwtSettings = new JwtSettings();
+builder.Configuration.GetSection("JwtSettings").Bind(jwtSettings);
+builder.Services.AddSingleton(jwtSettings);
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings.SecretKey)
+            )
+        };
+    });
 
 var app = builder.Build();
 
@@ -39,10 +81,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-
-public partial class Program { }

@@ -2,12 +2,14 @@ using ClinicAPI.Models.Dtos.Doctor;
 using ClinicAPI.Services.Clinics;
 using ClinicAPI.Services.Doctors;
 using ClinicAPI.Services.Specialities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicAPI.Controllers
 {
     [Route("api/v1/doctors")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class DoctorController : ControllerBase
     {
         private readonly IDoctorService _doctorService;
@@ -25,6 +27,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<DoctorResponseDto>>> GetAllDoctors()
         {
             var doctors = await _doctorService.GetAllAsync();
@@ -39,6 +42,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("search")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<DoctorResponseDto>>> SearchDoctors([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -51,6 +55,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<DoctorResponseDto>> GetDoctorById(int id)
         {
             var doctor = await _doctorService.GetByIdAsync(id);
