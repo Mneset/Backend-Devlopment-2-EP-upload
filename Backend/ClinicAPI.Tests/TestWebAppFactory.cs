@@ -3,6 +3,7 @@ using ClinicAPI.Models.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,8 @@ namespace ClinicAPI.Tests;
 
 public class TestWebAppFactory : WebApplicationFactory<Program>
 {
+    private readonly string _dbName = $"ClinicTestDb-{Guid.NewGuid()}";
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -21,7 +24,8 @@ public class TestWebAppFactory : WebApplicationFactory<Program>
                 services.Remove(descriptor);
 
             services.AddDbContext<ClinicDbContext>(options =>
-                options.UseInMemoryDatabase("ClinicTestDb"));
+                options.UseInMemoryDatabase(_dbName)
+                    .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning)));
         });
     }
 
@@ -81,10 +85,13 @@ public class TestWebAppFactory : WebApplicationFactory<Program>
             new Patient { Id = 3, FirstName = "Guest", LastName = "User", Gender = Gender.Male, DateOfBirth = new DateTime(2000, 1, 1), IsActive = true, IsRegistered = false }
         );
 
+        var adminPasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123");
+        var patientPasswordHash = BCrypt.Net.BCrypt.HashPassword("Patient123");
+
         db.Users.AddRange(
-            new User { Id = 1, Email = "admin@clinic.com", PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq", Role = Role.Admin, PatientId = null },
-            new User { Id = 2, Email = "jonas@email.com", PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq", Role = Role.Patient, PatientId = 1 },
-            new User { Id = 3, Email = "marie@email.com", PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq", Role = Role.Patient, PatientId = 2 },
+            new User { Id = 1, Email = "admin@clinic.com", PasswordHash = adminPasswordHash, Role = Role.Admin, PatientId = null },
+            new User { Id = 2, Email = "jonas@email.com", PasswordHash = patientPasswordHash, Role = Role.Patient, PatientId = 1 },
+            new User { Id = 3, Email = "marie@email.com", PasswordHash = patientPasswordHash, Role = Role.Patient, PatientId = 2 },
             new User { Id = 4, Email = "guest@email.com", PasswordHash = null, Role = Role.Guest, PatientId = 3 }
         );
 
