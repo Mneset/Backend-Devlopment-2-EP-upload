@@ -61,7 +61,8 @@ public class TestWebAppFactory : WebApplicationFactory<Program>
             new Speciality { Id = 1, Name = "Cardiology" },
             new Speciality { Id = 2, Name = "Dermatology" },
             new Speciality { Id = 3, Name = "Neurology" },
-            new Speciality { Id = 4, Name = "Orthopedics" }
+            new Speciality { Id = 4, Name = "Orthopedics" },
+            new Speciality { Id = 5, Name = "Radiology" }
         );
 
         db.AppointmentCategories.AddRange(
@@ -76,13 +77,15 @@ public class TestWebAppFactory : WebApplicationFactory<Program>
             new Doctor { Id = 1, FirstName = "Erik", LastName = "Hansen", IsActive = true, SpecialityId = 1, ClinicId = 1, Gender = Gender.Male },
             new Doctor { Id = 2, FirstName = "Anna", LastName = "Olsen", IsActive = true, SpecialityId = 2, ClinicId = 2, Gender = Gender.Female },
             new Doctor { Id = 3, FirstName = "Lars", LastName = "Berg", IsActive = true, SpecialityId = 3, ClinicId = 3, Gender = Gender.Male },
-            new Doctor { Id = 4, FirstName = "Sofia", LastName = "Dahl", IsActive = true, SpecialityId = 4, ClinicId = 4, Gender = Gender.Female }
+            new Doctor { Id = 4, FirstName = "Sofia", LastName = "Dahl", IsActive = true, SpecialityId = 4, ClinicId = 4, Gender = Gender.Female },
+            new Doctor { Id = 5, FirstName = "Magnus", LastName = "Solberg", IsActive = false, SpecialityId = 1, ClinicId = 1, Gender = Gender.Male }
         );
 
         db.Patients.AddRange(
             new Patient { Id = 1, FirstName = "Jonas", LastName = "Nilsen", Gender = Gender.Male, DateOfBirth = new DateTime(1990, 5, 15), IsActive = true, IsRegistered = true },
             new Patient { Id = 2, FirstName = "Marie", LastName = "Andersen", Gender = Gender.Female, DateOfBirth = new DateTime(1985, 3, 22), IsActive = true, IsRegistered = true },
-            new Patient { Id = 3, FirstName = "Guest", LastName = "User", Gender = Gender.Male, DateOfBirth = new DateTime(2000, 1, 1), IsActive = true, IsRegistered = false }
+            new Patient { Id = 3, FirstName = "Guest", LastName = "User", Gender = Gender.Male, DateOfBirth = new DateTime(2000, 1, 1), IsActive = true, IsRegistered = false },
+            new Patient { Id = 4, FirstName = "Inactive", LastName = "Patient", Gender = Gender.Male, DateOfBirth = new DateTime(1990, 1, 1), IsActive = false, IsRegistered = true }
         );
 
         var adminPasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123");
@@ -92,7 +95,8 @@ public class TestWebAppFactory : WebApplicationFactory<Program>
             new User { Id = 1, Email = "admin@clinic.com", PasswordHash = adminPasswordHash, Role = Role.Admin, PatientId = null },
             new User { Id = 2, Email = "jonas@email.com", PasswordHash = patientPasswordHash, Role = Role.Patient, PatientId = 1 },
             new User { Id = 3, Email = "marie@email.com", PasswordHash = patientPasswordHash, Role = Role.Patient, PatientId = 2 },
-            new User { Id = 4, Email = "guest@email.com", PasswordHash = null, Role = Role.Guest, PatientId = 3 }
+            new User { Id = 4, Email = "guest@email.com", PasswordHash = null, Role = Role.Guest, PatientId = 3 },
+            new User { Id = 5, Email = "inactive@test.com", PasswordHash = patientPasswordHash, Role = Role.Patient, PatientId = 4 }
         );
 
         db.Appointments.AddRange(

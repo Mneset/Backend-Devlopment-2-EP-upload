@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using ClinicAPI.Models.Dtos.Auth;
 using ClinicAPI.Models.Dtos.Patient;
@@ -208,5 +209,15 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.PostAsJsonAsync("/api/v1/auth/register/guest", request);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task Login_AsDeactivatedPatient_ReturnsUnauthorized()
+    {
+        var request = new LoginRequestDto { Email = "inactive@test.com", Password = "Patient123" };
+
+        var response = await _client.PostAsJsonAsync("/api/v1/auth/login", request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 }

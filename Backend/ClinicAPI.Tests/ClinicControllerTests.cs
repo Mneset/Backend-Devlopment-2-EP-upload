@@ -63,7 +63,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
     }
 
     [Fact]
-    public async Task GetClinicById_WithMissingId_ReturnsNotFound()
+    public async Task GetClinicById_WithNonExistentId_ReturnsNotFound()
     {
         var response = await _client.GetAsync("/api/v1/clinics/9999");
 
