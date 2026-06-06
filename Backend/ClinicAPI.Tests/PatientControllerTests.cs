@@ -270,7 +270,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Female,
             DateOfBirth = new DateTime(1992, 1, 1),
             Religion = Religion.None,
-            SocialSecurityNumber = "999000111",
+            SocialSecurityNumber = "99900011100",
             TaxNumber = "TX999",
             DriverLicenseNumber = "DL999",
             MedicalInsuranceNumber = "MI999"
@@ -351,7 +351,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1990, 1, 1),
             Religion = Religion.None,
-            SocialSecurityNumber = "111222333",
+            SocialSecurityNumber = "11122233300",
             TaxNumber = "TX111",
             DriverLicenseNumber = "DL111",
             MedicalInsuranceNumber = "MI111"
@@ -393,7 +393,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1990, 1, 1),
             Religion = Religion.None,
-            SocialSecurityNumber = "444555666",
+            SocialSecurityNumber = "44455566600",
             TaxNumber = "TX444",
             DriverLicenseNumber = "DL444",
             MedicalInsuranceNumber = "MI444"
@@ -502,7 +502,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Female,
             DateOfBirth = new DateTime(1990, 1, 1),
             Religion = Religion.None,
-            SocialSecurityNumber = "777888999",
+            SocialSecurityNumber = "77788899900",
             TaxNumber = "TX777",
             DriverLicenseNumber = "DL777",
             MedicalInsuranceNumber = "MI777"
@@ -534,7 +534,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1990, 1, 1),
             Religion = Religion.None,
-            SocialSecurityNumber = "121212121",
+            SocialSecurityNumber = "12121212100",
             TaxNumber = "TX121",
             DriverLicenseNumber = "DL121",
             MedicalInsuranceNumber = "MI121"

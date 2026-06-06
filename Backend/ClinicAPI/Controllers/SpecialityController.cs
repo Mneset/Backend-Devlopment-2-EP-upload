@@ -19,6 +19,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<SpecialityResponseDto>>> GetAllSpecialities()
         {
             var specialities = await _specialityService.GetAllAsync();
@@ -26,6 +27,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<SpecialityResponseDto>> GetSpecialityById(int id)
         {
             var speciality = await _specialityService.GetByIdAsync(id);

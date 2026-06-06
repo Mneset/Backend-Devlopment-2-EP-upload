@@ -11,6 +11,7 @@ public interface IPatientService : IBaseService<PatientResponseDto, int>
     public Task<PatientResponseDto> RegisterPatient(RegisterPatientRequestDto request);
     public Task<PatientResponseDto> CreateGuestPatient(CreateGuestPatientRequestDto request);
     public Task UpdatePatient(UpdatePatientRequestDto request);
+    public Task UpdateOwnProfile(int patientId, UpdateOwnProfileRequestDto request);
     public Task DeactivatePatient(int id);
     public Task ReactivatePatient(int id);
 }

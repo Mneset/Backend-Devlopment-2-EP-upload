@@ -50,7 +50,10 @@ public class AppointmentCategoryService : IAppointmentCategoryService
 
     public async Task DeleteAppointmentCategory(int id)
     {
-            await _context.AppointmentCategories.Where(ac => ac.Id == id ).ExecuteDeleteAsync();
+        var category = await _context.AppointmentCategories.FirstOrDefaultAsync(ac => ac.Id == id);
+        if (category == null) return;
+        _context.AppointmentCategories.Remove(category);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAppointmentCategory(UpdateAppointmentCategoryRequestDto appointmentCategoryData)

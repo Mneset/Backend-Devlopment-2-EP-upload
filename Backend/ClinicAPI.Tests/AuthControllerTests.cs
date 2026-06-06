@@ -100,7 +100,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Male,
             DateOfBirth = new DateTime(1990, 1, 1),
             Religion = Religion.PreferNotToSay,
-            SocialSecurityNumber = "123456789",
+            SocialSecurityNumber = "12345678900",
             TaxNumber = "TX001",
             DriverLicenseNumber = "DL001",
             MedicalInsuranceNumber = "MI001"
@@ -131,7 +131,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Female,
             DateOfBirth = new DateTime(1990, 1, 1),
             Religion = Religion.PreferNotToSay,
-            SocialSecurityNumber = "999999999",
+            SocialSecurityNumber = "99999999900",
             TaxNumber = "TX999",
             DriverLicenseNumber = "DL999",
             MedicalInsuranceNumber = "MI999"
@@ -154,7 +154,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
             Gender = Gender.Female,
             DateOfBirth = new DateTime(1992, 7, 4),
             Religion = Religion.PreferNotToSay,
-            SocialSecurityNumber = "555555555",
+            SocialSecurityNumber = "55555555500",
             TaxNumber = "TX555",
             DriverLicenseNumber = "DL555",
             MedicalInsuranceNumber = "MI555"

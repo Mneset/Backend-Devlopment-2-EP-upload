@@ -43,7 +43,7 @@ namespace ClinicAPI.Controllers
 
         [HttpGet("search")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<DoctorResponseDto>>> SearchDoctors([FromQuery] string name)
+        public async Task<ActionResult<IEnumerable<DoctorResponseDto>>> SearchDoctors([FromQuery] string? name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

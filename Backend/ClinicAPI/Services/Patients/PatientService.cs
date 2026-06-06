@@ -202,6 +202,32 @@ public class PatientService : IPatientService
             entity.MedicalInsuranceNumber = request.MedicalInsuranceNumber;
         }
 
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.PatientId == request.Id);
+        if (user != null)
+        {
+            user.Email = request.Email;
+        }
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateOwnProfile(int patientId, UpdateOwnProfileRequestDto request)
+    {
+        var entity = await _context.Patients.FirstAsync(p => p.Id == patientId);
+
+        entity.FirstName = request.FirstName;
+        entity.LastName = request.LastName;
+        entity.Gender = request.Gender;
+        entity.DateOfBirth = request.DateOfBirth;
+
+        if (entity.IsRegistered)
+        {
+            entity.Religion = request.Religion;
+        }
+
+        var user = await _context.Users.FirstAsync(u => u.PatientId == patientId);
+        user.Email = request.Email;
+
         await _context.SaveChangesAsync();
     }
 

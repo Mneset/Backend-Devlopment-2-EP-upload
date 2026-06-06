@@ -16,6 +16,7 @@ public enum Religion
     Hinduism,
     Buddhism,
     Other,
+    None,
     PreferNotToSay
 }
 

@@ -26,11 +26,25 @@ public class AuthService : IAuthService
         return await _context.Users.AnyAsync(u => u.Email == email);
     }
 
+    public async Task<bool> IsEmailTakenByAnotherPatient(string email, int patientId)
+    {
+        return await _context.Users.AnyAsync(u =>
+            u.Email == email &&
+            (u.PatientId == null || u.PatientId != patientId));
+    }
+
     public async Task<TokenResponseDto?> Login(LoginRequestDto request)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        var user = await _context.Users
+            .Include(u => u.Patient)
+            .FirstOrDefaultAsync(u => u.Email == request.Email);
 
         if (user == null || user.PasswordHash == null)
+        {
+            return null;
+        }
+
+        if (user.Patient != null && !user.Patient.IsActive)
         {
             return null;
         }

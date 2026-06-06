@@ -326,21 +326,31 @@ namespace ClinicAPI.Migrations
                         {
                             Id = 1,
                             DateOfBirth = new DateTime(1990, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10001",
                             FirstName = "Jonas",
                             Gender = 0,
                             IsActive = true,
                             IsRegistered = true,
-                            LastName = "Nilsen"
+                            LastName = "Nilsen",
+                            MedicalInsuranceNumber = "MI10001",
+                            Religion = 7,
+                            SocialSecurityNumber = "15059012345",
+                            TaxNumber = "TX10001"
                         },
                         new
                         {
                             Id = 2,
                             DateOfBirth = new DateTime(1985, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10002",
                             FirstName = "Marie",
                             Gender = 1,
                             IsActive = true,
                             IsRegistered = true,
-                            LastName = "Andersen"
+                            LastName = "Andersen",
+                            MedicalInsuranceNumber = "MI10002",
+                            Religion = 7,
+                            SocialSecurityNumber = "22038512345",
+                            TaxNumber = "TX10002"
                         },
                         new
                         {
@@ -428,14 +438,14 @@ namespace ClinicAPI.Migrations
                         {
                             Id = 1,
                             Email = "admin@clinic.com",
-                            PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq",
+                            PasswordHash = "$2a$11$4BEOTWkbHvboS6Nc9uM2P.rpQjvxmH5QuMcUzOp7Gl/EBys5hA2hK",
                             Role = 0
                         },
                         new
                         {
                             Id = 2,
                             Email = "jonas@email.com",
-                            PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
                             PatientId = 1,
                             Role = 1
                         },
@@ -443,7 +453,7 @@ namespace ClinicAPI.Migrations
                         {
                             Id = 3,
                             Email = "marie@email.com",
-                            PasswordHash = "$2a$11$Ot4Z9wnGRAz4tCBkzPWbOeGUDFoFJCy1Us3t/8.DqLIy9MiN6s4Aq",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
                             PatientId = 2,
                             Role = 1
                         },

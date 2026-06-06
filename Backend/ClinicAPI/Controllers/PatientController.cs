@@ -1,4 +1,6 @@
+using ClinicAPI.Authorization;
 using ClinicAPI.Models.Dtos.Patient;
+using ClinicAPI.Services.Auth;
 using ClinicAPI.Services.Patients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,17 +9,20 @@ namespace ClinicAPI.Controllers
 {
     [Route("api/v1/patients")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class PatientController : ControllerBase
     {
         private readonly IPatientService _patientService;
+        private readonly IAuthService _authService;
 
-        public PatientController(IPatientService patientService)
+        public PatientController(IPatientService patientService, IAuthService authService)
         {
             _patientService = patientService;
+            _authService = authService;
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<PatientResponseDto>>> GetAllPatients()
         {
             var patients = await _patientService.GetAllAsync();
@@ -25,6 +30,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<PatientResponseDto>>> GetAllPatientsIncludingInactive()
         {
             var patients = await _patientService.GetAllIncludingInactiveAsync();
@@ -32,6 +38,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<PatientResponseDto>> GetPatientById(int id)
         {
             var patient = await _patientService.GetByIdAsync(id);
@@ -45,6 +52,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpGet("all/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<PatientResponseDto>> GetPatientByIdIncludingInactive(int id)
         {
             var patient = await _patientService.GetByIdIncludingInactiveAsync(id);
@@ -58,6 +66,7 @@ namespace ClinicAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdatePatientById(int id, [FromBody] UpdatePatientRequestDto patientData)
         {
             if (id != patientData.Id)
@@ -70,11 +79,41 @@ namespace ClinicAPI.Controllers
                 return NotFound();
             }
 
+            if (await _authService.IsEmailTakenByAnotherPatient(patientData.Email, patientData.Id))
+            {
+                return Conflict("Email is already taken.");
+            }
+
             await _patientService.UpdatePatient(patientData);
             return NoContent();
         }
 
+        [HttpPut("me")]
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> UpdateMyProfile([FromBody] UpdateOwnProfileRequestDto request)
+        {
+            var patientId = User.GetPatientId();
+            if (patientId == null)
+            {
+                return Forbid();
+            }
+
+            if (await _patientService.GetByIdAsync(patientId.Value) == null)
+            {
+                return Forbid();
+            }
+
+            if (await _authService.IsEmailTakenByAnotherPatient(request.Email, patientId.Value))
+            {
+                return Conflict("Email is already taken.");
+            }
+
+            await _patientService.UpdateOwnProfile(patientId.Value, request);
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeactivatePatientById(int id)
         {
             if (!await _patientService.Exists(id))
@@ -86,7 +125,27 @@ namespace ClinicAPI.Controllers
             return NoContent();
         }
 
+        [HttpDelete("me")]
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> DeleteMyProfile()
+        {
+            var patientId = User.GetPatientId();
+            if (patientId == null)
+            {
+                return Forbid();
+            }
+
+            if (await _patientService.GetByIdAsync(patientId.Value) == null)
+            {
+                return Forbid();
+            }
+
+            await _patientService.DeactivatePatient(patientId.Value);
+            return NoContent();
+        }
+
         [HttpPatch("{id}/reactivate")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ReactivatePatientById(int id)
         {
             if (!await _patientService.Exists(id))

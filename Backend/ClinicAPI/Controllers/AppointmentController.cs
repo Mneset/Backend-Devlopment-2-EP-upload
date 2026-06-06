@@ -36,6 +36,16 @@ namespace ClinicAPI.Controllers
             _appointmentCategoryService = appointmentCategoryService;
         }
 
+        private async Task<bool> CallerIsStillActivePatientAsync()
+        {
+            var patientId = User.GetPatientId();
+            if (patientId == null)
+            {
+                return true;
+            }
+            return await _patientService.GetByIdAsync(patientId.Value) != null;
+        }
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<AppointmentResponseDto>>> GetAllAppointments([FromQuery] Status? status = null)
@@ -50,19 +60,19 @@ namespace ClinicAPI.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<ActionResult<IEnumerable<AppointmentResponseDto>>> GetMyAppointments()
         {
-            var patientId = User.GetPatientId();
-            if (patientId == null)
-            {
-                return Forbid();
-            }
+            if (!await CallerIsStillActivePatientAsync()) return Forbid();
 
-            var appointments = await _appointmentService.GetByPatientAsync(patientId.Value);
+            var patientId = User.GetPatientId()!.Value;
+
+            var appointments = await _appointmentService.GetByPatientAsync(patientId);
             return Ok(appointments);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<AppointmentResponseDto>> GetAppointmentById(int id)
         {
+            if (!await CallerIsStillActivePatientAsync()) return Forbid();
+
             var appointment = await _appointmentService.GetByIdAsync(id);
 
             if (appointment == null)
@@ -130,6 +140,8 @@ namespace ClinicAPI.Controllers
                 return BadRequest("Id in route does not match the Id in the request body");
             }
 
+            if (!await CallerIsStillActivePatientAsync()) return Forbid();
+
             var existing = await _appointmentService.GetByIdAsync(id);
             if (existing == null)
             {
@@ -158,6 +170,8 @@ namespace ClinicAPI.Controllers
         [HttpPatch("{id}/cancel")]
         public async Task<IActionResult> CancelAppointment(int id)
         {
+            if (!await CallerIsStillActivePatientAsync()) return Forbid();
+
             var appointment = await _appointmentService.GetByIdAsync(id);
             if (appointment == null)
             {

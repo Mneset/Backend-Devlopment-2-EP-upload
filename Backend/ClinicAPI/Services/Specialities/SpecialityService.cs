@@ -48,7 +48,10 @@ public class SpecialityService : ISpecialityService
 
     public async Task DeleteSpeciality(int id)
     {
-        await _context.Specialities.Where(s => s.Id == id ).ExecuteDeleteAsync();
+        var speciality = await _context.Specialities.FirstOrDefaultAsync(s => s.Id == id);
+        if (speciality == null) return;
+        _context.Specialities.Remove(speciality);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateSpeciality(UpdateSpecialityRequestDto speciality)

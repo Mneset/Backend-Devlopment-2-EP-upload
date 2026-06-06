@@ -37,6 +37,11 @@ namespace ClinicAPI.Controllers
         [HttpPost("register/patient")]
         public async Task<ActionResult<PatientResponseDto>> Register([FromBody] RegisterPatientRequestDto request)
         {
+            if (request.DateOfBirth > DateTime.UtcNow)
+            {
+                return BadRequest("Date of birth cannot be in the future.");
+            }
+
             if (await _authService.IsEmailTaken(request.Email))
             {
                 return Conflict("Email is already taken.");
