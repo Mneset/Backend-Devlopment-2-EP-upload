@@ -26,7 +26,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         body.Should().NotBeNull();
         body.Token.Should().NotBeNullOrEmpty();
         body.Role.Should().Be(Role.Admin);
@@ -42,7 +42,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         body.Should().NotBeNull();
         body.Token.Should().NotBeNullOrEmpty();
         body.Role.Should().Be(Role.Patient);
@@ -110,7 +110,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var body = await response.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         body.Should().NotBeNull();
         body.Id.Should().BeGreaterThan(0);
         body.FirstName.Should().Be("New");
@@ -167,7 +167,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
         var loginResponse = await _client.PostAsJsonAsync("/api/v1/auth/login", loginRequest);
 
         loginResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        var token = await loginResponse.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var token = await loginResponse.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         token.Should().NotBeNull();
         token.Role.Should().Be(Role.Patient);
     }
@@ -187,7 +187,7 @@ public class AuthControllerTests : IClassFixture<TestWebAppFactory>
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var body = await response.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         body.Should().NotBeNull();
         body.Id.Should().BeGreaterThan(0);
         body.FirstName.Should().Be("Guest");

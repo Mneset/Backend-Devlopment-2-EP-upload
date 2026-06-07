@@ -74,6 +74,11 @@ namespace ClinicAPI.Controllers
                 return BadRequest("Id in route does not match the Id in the request body");
             }
 
+            if (patientData.DateOfBirth > DateTime.UtcNow)
+            {
+                return BadRequest("Date of birth cannot be in the future.");
+            }
+
             if (!await _patientService.Exists(patientData.Id))
             {
                 return NotFound();
@@ -88,10 +93,39 @@ namespace ClinicAPI.Controllers
             return NoContent();
         }
 
+        [HttpGet("me")]
+        [Authorize(Roles = "Patient")]
+        public async Task<ActionResult<MyProfileResponseDto>> GetMyProfile()
+        {
+            var patientId = User.GetPatientId();
+            if (patientId == null)
+            {
+                return Forbid();
+            }
+
+            if (await _patientService.GetByIdAsync(patientId.Value) == null)
+            {
+                return Forbid();
+            }
+
+            var profile = await _patientService.GetMyProfile(patientId.Value);
+            if (profile == null)
+            {
+                return Forbid();
+            }
+
+            return Ok(profile);
+        }
+
         [HttpPut("me")]
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> UpdateMyProfile([FromBody] UpdateOwnProfileRequestDto request)
         {
+            if (request.DateOfBirth > DateTime.UtcNow)
+            {
+                return BadRequest("Date of birth cannot be in the future.");
+            }
+
             var patientId = User.GetPatientId();
             if (patientId == null)
             {

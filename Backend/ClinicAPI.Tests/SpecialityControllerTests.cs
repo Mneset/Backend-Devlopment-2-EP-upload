@@ -25,7 +25,7 @@ public class SpecialityControllerTests : IClassFixture<TestWebAppFactory>
     {
         var loginRequest = new LoginRequestDto { Email = email, Password = password };
         var response = await _client.PostAsJsonAsync("/api/v1/auth/login", loginRequest);
-        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", body!.Token);
     }
 
@@ -35,7 +35,7 @@ public class SpecialityControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/specialities");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var specialities = await response.Content.ReadFromJsonAsync<List<SpecialityResponseDto>>();
+        var specialities = await response.Content.ReadFromJsonAsync<List<SpecialityResponseDto>>(TestWebAppFactory.JsonOptions);
         specialities.Should().HaveCount(5);
     }
 
@@ -45,7 +45,7 @@ public class SpecialityControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/specialities/1");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var speciality = await response.Content.ReadFromJsonAsync<SpecialityResponseDto>();
+        var speciality = await response.Content.ReadFromJsonAsync<SpecialityResponseDto>(TestWebAppFactory.JsonOptions);
         speciality!.Id.Should().Be(1);
         speciality.Name.Should().Be("Cardiology");
     }
@@ -68,7 +68,7 @@ public class SpecialityControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.PostAsJsonAsync("/api/v1/specialities", request);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var created = await response.Content.ReadFromJsonAsync<SpecialityResponseDto>();
+        var created = await response.Content.ReadFromJsonAsync<SpecialityResponseDto>(TestWebAppFactory.JsonOptions);
         created!.Name.Should().Be("Test Speciality");
         created.Id.Should().BeGreaterThan(0);
     }
@@ -95,7 +95,7 @@ public class SpecialityControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var verify = await _client.GetAsync("/api/v1/specialities/1");
-        var updated = await verify.Content.ReadFromJsonAsync<SpecialityResponseDto>();
+        var updated = await verify.Content.ReadFromJsonAsync<SpecialityResponseDto>(TestWebAppFactory.JsonOptions);
         updated!.Name.Should().Be("Updated Cardiology");
     }
 

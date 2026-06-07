@@ -184,6 +184,27 @@ public class PatientService : IPatientService
         };
     }
 
+    public async Task<MyProfileResponseDto?> GetMyProfile(int patientId)
+    {
+        return await _context.Users
+            .Where(u => u.PatientId == patientId && u.Patient != null && u.Patient.IsActive)
+            .Select(u => new MyProfileResponseDto
+            {
+                Id = u.Patient!.Id,
+                Email = u.Email,
+                FirstName = u.Patient.FirstName,
+                LastName = u.Patient.LastName,
+                Gender = u.Patient.Gender,
+                DateOfBirth = u.Patient.DateOfBirth,
+                Religion = u.Patient.Religion,
+                SocialSecurityNumber = u.Patient.SocialSecurityNumber,
+                TaxNumber = u.Patient.TaxNumber,
+                DriverLicenseNumber = u.Patient.DriverLicenseNumber,
+                MedicalInsuranceNumber = u.Patient.MedicalInsuranceNumber
+            })
+            .FirstOrDefaultAsync();
+    }
+
     public async Task UpdatePatient(UpdatePatientRequestDto request)
     {
         var entity = await _context.Patients.FirstAsync(p => p.Id == request.Id);

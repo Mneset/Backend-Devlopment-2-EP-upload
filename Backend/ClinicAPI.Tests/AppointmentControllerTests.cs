@@ -36,7 +36,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
     {
         var loginRequest = new LoginRequestDto { Email = email, Password = password };
         var response = await _client.PostAsJsonAsync("/api/v1/auth/login", loginRequest);
-        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", body!.Token);
     }
 
@@ -66,7 +66,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/appointments");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var appointments = await response.Content.ReadFromJsonAsync<List<AppointmentResponseDto>>();
+        var appointments = await response.Content.ReadFromJsonAsync<List<AppointmentResponseDto>>(TestWebAppFactory.JsonOptions);
         appointments.Should().HaveCount(3);
     }
 
@@ -78,7 +78,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/appointments?status=Scheduled");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var appointments = await response.Content.ReadFromJsonAsync<List<AppointmentResponseDto>>();
+        var appointments = await response.Content.ReadFromJsonAsync<List<AppointmentResponseDto>>(TestWebAppFactory.JsonOptions);
         appointments.Should().OnlyContain(a => a.Status == Status.Scheduled);
         appointments.Should().HaveCount(2);
     }
@@ -91,7 +91,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/appointments/mine");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var appointments = await response.Content.ReadFromJsonAsync<List<AppointmentResponseDto>>();
+        var appointments = await response.Content.ReadFromJsonAsync<List<AppointmentResponseDto>>(TestWebAppFactory.JsonOptions);
         appointments.Should().NotBeEmpty();
         appointments.Should().OnlyContain(a => a.PatientId == 1);
     }
@@ -104,7 +104,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/appointments/1");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var appointment = await response.Content.ReadFromJsonAsync<AppointmentResponseDto>();
+        var appointment = await response.Content.ReadFromJsonAsync<AppointmentResponseDto>(TestWebAppFactory.JsonOptions);
         appointment!.PatientId.Should().Be(1);
     }
 
@@ -145,7 +145,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.PostAsJsonAsync("/api/v1/appointments", request);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var appointment = await response.Content.ReadFromJsonAsync<AppointmentResponseDto>();
+        var appointment = await response.Content.ReadFromJsonAsync<AppointmentResponseDto>(TestWebAppFactory.JsonOptions);
         appointment!.PatientId.Should().Be(1);
         appointment.DoctorId.Should().Be(2);
         appointment.Status.Should().Be(Status.Scheduled);
@@ -199,7 +199,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var verify = await _client.GetAsync("/api/v1/appointments/1");
-        var appointment = await verify.Content.ReadFromJsonAsync<AppointmentResponseDto>();
+        var appointment = await verify.Content.ReadFromJsonAsync<AppointmentResponseDto>(TestWebAppFactory.JsonOptions);
         appointment!.Status.Should().Be(Status.Cancelled);
     }
 
@@ -224,7 +224,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var verify = await _client.GetAsync("/api/v1/appointments/1");
-        var appointment = await verify.Content.ReadFromJsonAsync<AppointmentResponseDto>();
+        var appointment = await verify.Content.ReadFromJsonAsync<AppointmentResponseDto>(TestWebAppFactory.JsonOptions);
         appointment!.Status.Should().Be(Status.Completed);
     }
 
@@ -256,7 +256,7 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var verify = await _client.GetAsync("/api/v1/appointments/1");
-        var appointment = await verify.Content.ReadFromJsonAsync<AppointmentResponseDto>();
+        var appointment = await verify.Content.ReadFromJsonAsync<AppointmentResponseDto>(TestWebAppFactory.JsonOptions);
         appointment!.AppointmentDate.Should().Be(newDate);
         appointment.DurationInMin.Should().Be(45);
     }

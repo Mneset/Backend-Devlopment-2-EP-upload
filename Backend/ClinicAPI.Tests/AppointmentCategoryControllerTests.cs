@@ -25,7 +25,7 @@ public class AppointmentCategoryControllerTests : IClassFixture<TestWebAppFactor
     {
         var loginRequest = new LoginRequestDto { Email = email, Password = password };
         var response = await _client.PostAsJsonAsync("/api/v1/auth/login", loginRequest);
-        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", body!.Token);
     }
 
@@ -35,7 +35,7 @@ public class AppointmentCategoryControllerTests : IClassFixture<TestWebAppFactor
         var response = await _client.GetAsync("/api/v1/appointmentcategories");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var categories = await response.Content.ReadFromJsonAsync<List<AppointmentCategoryResponseDto>>();
+        var categories = await response.Content.ReadFromJsonAsync<List<AppointmentCategoryResponseDto>>(TestWebAppFactory.JsonOptions);
         categories.Should().HaveCount(5);
     }
 
@@ -45,7 +45,7 @@ public class AppointmentCategoryControllerTests : IClassFixture<TestWebAppFactor
         var response = await _client.GetAsync("/api/v1/appointmentcategories/1");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var category = await response.Content.ReadFromJsonAsync<AppointmentCategoryResponseDto>();
+        var category = await response.Content.ReadFromJsonAsync<AppointmentCategoryResponseDto>(TestWebAppFactory.JsonOptions);
         category!.Id.Should().Be(1);
         category.Name.Should().Be("General Checkup");
     }
@@ -68,7 +68,7 @@ public class AppointmentCategoryControllerTests : IClassFixture<TestWebAppFactor
         var response = await _client.PostAsJsonAsync("/api/v1/appointmentcategories", request);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var created = await response.Content.ReadFromJsonAsync<AppointmentCategoryResponseDto>();
+        var created = await response.Content.ReadFromJsonAsync<AppointmentCategoryResponseDto>(TestWebAppFactory.JsonOptions);
         created!.Name.Should().Be("Test Category");
         created.Id.Should().BeGreaterThan(0);
     }
@@ -95,7 +95,7 @@ public class AppointmentCategoryControllerTests : IClassFixture<TestWebAppFactor
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var verify = await _client.GetAsync("/api/v1/appointmentcategories/1");
-        var updated = await verify.Content.ReadFromJsonAsync<AppointmentCategoryResponseDto>();
+        var updated = await verify.Content.ReadFromJsonAsync<AppointmentCategoryResponseDto>(TestWebAppFactory.JsonOptions);
         updated!.Name.Should().Be("Updated General Checkup");
     }
 

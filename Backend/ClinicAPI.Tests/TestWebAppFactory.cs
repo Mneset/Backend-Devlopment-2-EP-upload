@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using ClinicAPI.Data;
 using ClinicAPI.Models.Entities;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +14,11 @@ namespace ClinicAPI.Tests;
 public class TestWebAppFactory : WebApplicationFactory<Program>
 {
     private readonly string _dbName = $"ClinicTestDb-{Guid.NewGuid()}";
+
+    public static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        Converters = { new JsonStringEnumConverter() }
+    };
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

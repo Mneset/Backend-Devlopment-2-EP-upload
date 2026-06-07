@@ -32,7 +32,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
     {
         var loginRequest = new LoginRequestDto { Email = email, Password = password };
         var response = await _client.PostAsJsonAsync("/api/v1/auth/login", loginRequest);
-        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", body!.Token);
     }
 
@@ -62,7 +62,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/patients");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var patients = await response.Content.ReadFromJsonAsync<List<PatientResponseDto>>();
+        var patients = await response.Content.ReadFromJsonAsync<List<PatientResponseDto>>(TestWebAppFactory.JsonOptions);
         patients.Should().HaveCount(3);
         patients.Should().OnlyContain(p => p.IsActive);
     }
@@ -75,7 +75,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/patients/1");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var patient = await response.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var patient = await response.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         patient!.Id.Should().Be(1);
         patient.FirstName.Should().Be("Jonas");
         patient.LastName.Should().Be("Nilsen");
@@ -110,7 +110,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/patients/all");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var patients = await response.Content.ReadFromJsonAsync<List<PatientResponseDto>>();
+        var patients = await response.Content.ReadFromJsonAsync<List<PatientResponseDto>>(TestWebAppFactory.JsonOptions);
         patients.Should().HaveCount(4);
         patients.Should().Contain(p => p.Id == 4 && !p.IsActive);
     }
@@ -123,7 +123,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/patients/all/4");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var patient = await response.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var patient = await response.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         patient!.Id.Should().Be(4);
         patient.IsActive.Should().BeFalse();
     }
@@ -158,7 +158,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var verify = await _client.GetAsync("/api/v1/patients/1");
-        var updated = await verify.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var updated = await verify.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         updated!.FirstName.Should().Be("UpdatedJonas");
     }
 
@@ -223,6 +223,72 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
     }
 
     [Fact]
+    public async Task GetMyProfile_AsAnonymous_ReturnsUnauthorized()
+    {
+        var response = await _client.GetAsync("/api/v1/patients/me");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task GetMyProfile_AsAdmin_ReturnsForbidden()
+    {
+        await LoginAsAdminAsync();
+
+        var response = await _client.GetAsync("/api/v1/patients/me");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
+    public async Task GetMyProfile_AsPatient_ReturnsProfile()
+    {
+        await LoginAsPatientAsync();
+
+        var response = await _client.GetAsync("/api/v1/patients/me");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var profile = await response.Content.ReadFromJsonAsync<MyProfileResponseDto>(TestWebAppFactory.JsonOptions);
+        profile!.Id.Should().Be(1);
+        profile.Email.Should().Be("jonas@email.com");
+        profile.FirstName.Should().Be("Jonas");
+        profile.LastName.Should().Be("Nilsen");
+    }
+
+    [Fact]
+    public async Task GetMyProfile_AsDeactivatedPatientWithStaleToken_ReturnsForbidden()
+    {
+        var register = new RegisterPatientRequestDto
+        {
+            Email = "stalegetprofile@test.com",
+            Password = "Patient123",
+            FirstName = "Stale",
+            LastName = "Get",
+            Gender = Gender.Male,
+            DateOfBirth = new DateTime(1990, 1, 1),
+            Religion = Religion.None,
+            SocialSecurityNumber = "33344455500",
+            TaxNumber = "TX333",
+            DriverLicenseNumber = "DL333",
+            MedicalInsuranceNumber = "MI333"
+        };
+        var registerResp = await _client.PostAsJsonAsync("/api/v1/auth/register/patient", register);
+        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
+
+        await LoginAsAsync("stalegetprofile@test.com", "Patient123");
+        var staleAuth = _client.DefaultRequestHeaders.Authorization;
+
+        await LoginAsAdminAsync();
+        var deactivate = await _client.DeleteAsync($"/api/v1/patients/{created!.Id}");
+        deactivate.StatusCode.Should().Be(HttpStatusCode.NoContent);
+
+        _client.DefaultRequestHeaders.Authorization = staleAuth;
+        var response = await _client.GetAsync("/api/v1/patients/me");
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
     public async Task UpdateMyProfile_AsAnonymous_ReturnsUnauthorized()
     {
         var request = new UpdateOwnProfileRequestDto
@@ -276,7 +342,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             MedicalInsuranceNumber = "MI999"
         };
         var registerResp = await _client.PostAsJsonAsync("/api/v1/auth/register/patient", register);
-        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
 
         await LoginAsAsync("selfupdate@test.com", "Patient123");
 
@@ -295,7 +361,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
 
         await LoginAsAdminAsync();
         var verify = await _client.GetAsync($"/api/v1/patients/{created!.Id}");
-        var updated = await verify.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var updated = await verify.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         updated!.FirstName.Should().Be("SelfUpdated");
         updated.LastName.Should().Be("UpdateNew");
         updated.Religion.Should().Be(Religion.Buddhism);
@@ -357,7 +423,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             MedicalInsuranceNumber = "MI111"
         };
         var registerResp = await _client.PostAsJsonAsync("/api/v1/auth/register/patient", register);
-        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
 
         await LoginAsAsync("staleprofile@test.com", "Patient123");
         var staleAuth = _client.DefaultRequestHeaders.Authorization;
@@ -430,11 +496,11 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var activePatients = await (await _client.GetAsync("/api/v1/patients")).Content
-            .ReadFromJsonAsync<List<PatientResponseDto>>();
+            .ReadFromJsonAsync<List<PatientResponseDto>>(TestWebAppFactory.JsonOptions);
         activePatients.Should().NotContain(p => p.Id == 1);
 
         var allAppointments = await (await _client.GetAsync("/api/v1/appointments")).Content
-            .ReadFromJsonAsync<List<AppointmentResponseDto>>();
+            .ReadFromJsonAsync<List<AppointmentResponseDto>>(TestWebAppFactory.JsonOptions);
         allAppointments.Should().Contain(a => a.Id == 1 && a.Status == Status.Cancelled);
     }
 
@@ -458,7 +524,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
 
         var verify = await _client.GetAsync("/api/v1/patients/4");
         verify.StatusCode.Should().Be(HttpStatusCode.OK);
-        var patient = await verify.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var patient = await verify.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         patient!.IsActive.Should().BeTrue();
     }
 
@@ -508,7 +574,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             MedicalInsuranceNumber = "MI777"
         };
         var registerResp = await _client.PostAsJsonAsync("/api/v1/auth/register/patient", register);
-        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
 
         await LoginAsAsync("selfdelete@test.com", "Patient123");
 
@@ -518,7 +584,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
         await LoginAsAdminAsync();
         var verify = await _client.GetAsync($"/api/v1/patients/all/{created!.Id}");
         verify.StatusCode.Should().Be(HttpStatusCode.OK);
-        var patient = await verify.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var patient = await verify.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
         patient!.IsActive.Should().BeFalse();
     }
 
@@ -540,7 +606,7 @@ public class PatientControllerTests : IClassFixture<TestWebAppFactory>
             MedicalInsuranceNumber = "MI121"
         };
         var registerResp = await _client.PostAsJsonAsync("/api/v1/auth/register/patient", register);
-        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>();
+        var created = await registerResp.Content.ReadFromJsonAsync<PatientResponseDto>(TestWebAppFactory.JsonOptions);
 
         await LoginAsAsync("staledelete@test.com", "Patient123");
         var staleAuth = _client.DefaultRequestHeaders.Authorization;

@@ -33,7 +33,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
     {
         var loginRequest = new LoginRequestDto { Email = email, Password = password };
         var response = await _client.PostAsJsonAsync("/api/v1/auth/login", loginRequest);
-        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>();
+        var body = await response.Content.ReadFromJsonAsync<TokenResponseDto>(TestWebAppFactory.JsonOptions);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", body!.Token);
     }
 
@@ -43,7 +43,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/clinics");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var clinics = await response.Content.ReadFromJsonAsync<List<ClinicResponseDto>>();
+        var clinics = await response.Content.ReadFromJsonAsync<List<ClinicResponseDto>>(TestWebAppFactory.JsonOptions);
         clinics.Should().NotBeNull();
         clinics.Should().HaveCount(5);
         clinics.Should().OnlyContain(c => c.IsActive);
@@ -55,7 +55,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/clinics/1");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var clinic = await response.Content.ReadFromJsonAsync<ClinicResponseDto>();
+        var clinic = await response.Content.ReadFromJsonAsync<ClinicResponseDto>(TestWebAppFactory.JsonOptions);
         clinic.Should().NotBeNull();
         clinic.Id.Should().Be(1);
         clinic.Name.Should().Be("Oslo University Hospital");
@@ -96,7 +96,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/clinics/all");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var clinics = await response.Content.ReadFromJsonAsync<List<ClinicResponseDto>>();
+        var clinics = await response.Content.ReadFromJsonAsync<List<ClinicResponseDto>>(TestWebAppFactory.JsonOptions);
         clinics.Should().HaveCount(5);
     }
 
@@ -110,7 +110,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.PostAsJsonAsync("/api/v1/clinics", request);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        var created = await response.Content.ReadFromJsonAsync<ClinicResponseDto>();
+        var created = await response.Content.ReadFromJsonAsync<ClinicResponseDto>(TestWebAppFactory.JsonOptions);
         created.Should().NotBeNull();
         created.Id.Should().BeGreaterThan(0);
         created.Name.Should().Be("New Test Clinic");
@@ -129,7 +129,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var verify = await _client.GetAsync("/api/v1/clinics/1");
-        var updated = await verify.Content.ReadFromJsonAsync<ClinicResponseDto>();
+        var updated = await verify.Content.ReadFromJsonAsync<ClinicResponseDto>(TestWebAppFactory.JsonOptions);
         updated!.Name.Should().Be("Updated Name");
     }
 
@@ -164,7 +164,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
         var response = await _client.GetAsync("/api/v1/clinics/all/1");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var clinic = await response.Content.ReadFromJsonAsync<ClinicResponseDto>();
+        var clinic = await response.Content.ReadFromJsonAsync<ClinicResponseDto>(TestWebAppFactory.JsonOptions);
         clinic.Should().NotBeNull();
         clinic.Id.Should().Be(1);
         clinic.IsActive.Should().BeFalse();
@@ -194,7 +194,7 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
 
         var verify = await _client.GetAsync("/api/v1/clinics/1");
         verify.StatusCode.Should().Be(HttpStatusCode.OK);
-        var clinic = await verify.Content.ReadFromJsonAsync<ClinicResponseDto>();
+        var clinic = await verify.Content.ReadFromJsonAsync<ClinicResponseDto>(TestWebAppFactory.JsonOptions);
         clinic!.IsActive.Should().BeTrue();
     }
 
@@ -208,15 +208,15 @@ public class ClinicControllerTests : IClassFixture<TestWebAppFactory>
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         var activeClinics = await (await _client.GetAsync("/api/v1/clinics")).Content
-            .ReadFromJsonAsync<List<ClinicResponseDto>>();
+            .ReadFromJsonAsync<List<ClinicResponseDto>>(TestWebAppFactory.JsonOptions);
         activeClinics.Should().NotContain(c => c.Id == 1);
 
         var activeDoctors = await (await _client.GetAsync("/api/v1/doctors")).Content
-            .ReadFromJsonAsync<List<DoctorResponseDto>>();
+            .ReadFromJsonAsync<List<DoctorResponseDto>>(TestWebAppFactory.JsonOptions);
         activeDoctors.Should().NotContain(d => d.Id == 1);
 
         var allAppointments = await (await _client.GetAsync("/api/v1/appointments")).Content
-            .ReadFromJsonAsync<List<AppointmentResponseDto>>();
+            .ReadFromJsonAsync<List<AppointmentResponseDto>>(TestWebAppFactory.JsonOptions);
         allAppointments.Should().Contain(a => a.Id == 1 && a.Status == Status.Cancelled);
     }
 }

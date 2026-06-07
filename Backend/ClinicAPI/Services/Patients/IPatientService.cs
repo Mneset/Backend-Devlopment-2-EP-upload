@@ -10,6 +10,7 @@ public interface IPatientService : IBaseService<PatientResponseDto, int>
     public Task<PatientResponseDto?> GetByIdIncludingInactiveAsync(int id);
     public Task<PatientResponseDto> RegisterPatient(RegisterPatientRequestDto request);
     public Task<PatientResponseDto> CreateGuestPatient(CreateGuestPatientRequestDto request);
+    public Task<MyProfileResponseDto?> GetMyProfile(int patientId);
     public Task UpdatePatient(UpdatePatientRequestDto request);
     public Task UpdateOwnProfile(int patientId, UpdateOwnProfileRequestDto request);
     public Task DeactivatePatient(int id);
