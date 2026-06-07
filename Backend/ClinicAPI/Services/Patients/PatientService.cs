@@ -26,6 +26,10 @@ public class PatientService : IPatientService
             .Select(p => new PatientResponseDto
             {
                 Id = p.Id,
+                Email = _context.Users
+                    .Where(u => u.PatientId == p.Id)
+                    .Select(u => u.Email)
+                    .FirstOrDefault(),
                 FirstName = p.FirstName,
                 LastName = p.LastName,
                 Gender = p.Gender,
@@ -47,6 +51,10 @@ public class PatientService : IPatientService
             .Select(p => new PatientResponseDto
             {
                 Id = p.Id,
+                Email = _context.Users
+                    .Where(u => u.PatientId == p.Id)
+                    .Select(u => u.Email)
+                    .FirstOrDefault(),
                 FirstName = p.FirstName,
                 LastName = p.LastName,
                 Gender = p.Gender,
@@ -69,6 +77,10 @@ public class PatientService : IPatientService
             .Select(p => new PatientResponseDto
             {
                 Id = p.Id,
+                Email = _context.Users
+                    .Where(u => u.PatientId == p.Id)
+                    .Select(u => u.Email)
+                    .FirstOrDefault(),
                 FirstName = p.FirstName,
                 LastName = p.LastName,
                 Gender = p.Gender,
@@ -91,6 +103,10 @@ public class PatientService : IPatientService
             .Select(p => new PatientResponseDto
             {
                 Id = p.Id,
+                Email = _context.Users
+                    .Where(u => u.PatientId == p.Id)
+                    .Select(u => u.Email)
+                    .FirstOrDefault(),
                 FirstName = p.FirstName,
                 LastName = p.LastName,
                 Gender = p.Gender,
@@ -138,6 +154,7 @@ public class PatientService : IPatientService
         return new PatientResponseDto
         {
             Id = entity.Id,
+            Email = user.Email,
             FirstName = entity.FirstName,
             LastName = entity.LastName,
             Gender = entity.Gender,

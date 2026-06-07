@@ -46,3 +46,33 @@ export interface UpdateOwnProfileRequestDto {
   dateOfBirth: string;
   religion: Religion | null;
 }
+
+export interface PatientResponseDto {
+  id: number;
+  email: string | null;
+  firstName: string;
+  lastName: string;
+  gender: Gender;
+  dateOfBirth: string;
+  isActive: boolean;
+  isRegistered: boolean;
+  religion: Religion | null;
+  socialSecurityNumber: string | null;
+  taxNumber: string | null;
+  driverLicenseNumber: string | null;
+  medicalInsuranceNumber: string | null;
+}
+
+export interface UpdatePatientRequestDto {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  gender: Gender;
+  dateOfBirth: string;
+  religion: Religion | null;
+  socialSecurityNumber: string | null;
+  taxNumber: string | null;
+  driverLicenseNumber: string | null;
+  medicalInsuranceNumber: string | null;
+}
