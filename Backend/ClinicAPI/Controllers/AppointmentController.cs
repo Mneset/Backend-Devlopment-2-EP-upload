@@ -1,5 +1,6 @@
 using ClinicAPI.Authorization;
 using ClinicAPI.Models.Dtos.Appointment;
+using ClinicAPI.Models.Dtos.Patient;
 using ClinicAPI.Models.Entities;
 using ClinicAPI.Services.AppointmentCategories;
 using ClinicAPI.Services.Appointments;
@@ -129,6 +130,57 @@ namespace ClinicAPI.Controllers
             }
 
             var appointment = await _appointmentService.BookAppointment(patientId.Value, request);
+            return CreatedAtAction(nameof(GetAppointmentById), new { id = appointment.Id }, appointment);
+        }
+
+        [HttpPost("guest")]
+        [AllowAnonymous]
+        public async Task<ActionResult<AppointmentResponseDto>> BookGuestAppointment([FromBody] BookGuestAppointmentRequestDto request)
+        {
+            if (request.DateOfBirth > DateTime.UtcNow)
+            {
+                return BadRequest("Date of birth cannot be in the future.");
+            }
+
+            var doctor = await _doctorService.GetByIdAsync(request.DoctorId);
+            if (doctor == null)
+            {
+                return BadRequest("Doctor does not exist or is not active.");
+            }
+
+            if (doctor.ClinicId != request.ClinicId)
+            {
+                return BadRequest("Doctor does not work at the chosen clinic.");
+            }
+
+            if (await _clinicService.GetByIdAsync(request.ClinicId) == null)
+            {
+                return BadRequest("Clinic does not exist or is not active.");
+            }
+
+            if (!await _appointmentCategoryService.Exists(request.AppointmentCategoryId))
+            {
+                return BadRequest("Appointment category does not exist.");
+            }
+
+            var guest = await _patientService.CreateGuestPatient(new CreateGuestPatientRequestDto
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Gender = request.Gender,
+                DateOfBirth = request.DateOfBirth
+            });
+
+            var bookRequest = new BookAppointmentRequestDto
+            {
+                DoctorId = request.DoctorId,
+                ClinicId = request.ClinicId,
+                AppointmentCategoryId = request.AppointmentCategoryId,
+                AppointmentDate = request.AppointmentDate,
+                DurationInMin = request.DurationInMin
+            };
+
+            var appointment = await _appointmentService.BookAppointment(guest.Id, bookRequest);
             return CreatedAtAction(nameof(GetAppointmentById), new { id = appointment.Id }, appointment);
         }
 
