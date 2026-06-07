@@ -19,6 +19,12 @@ export default async function Home() {
           description="Browse clinics and doctors and book an Appointment."
         />
 
+        <DashboardCard
+          href="/search"
+          title="Find a doctor"
+          description="Search for a doctor by name and view their clinic and speciality."
+        />
+
         {isPatient && (
           <>
             <DashboardCard
