@@ -11,10 +11,13 @@ type Props = {
   currentDuration: number;
 };
 
-function toLocalDateTimeInput(iso: string): string {
+function splitDateTime(iso: string): { date: string; time: string } {
   const d = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  return {
+    date: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+    time: `${pad(d.getHours())}:${pad(d.getMinutes())}`,
+  };
 }
 
 export default function RescheduleForm({ appointmentId, currentDate, currentDuration }: Props) {
@@ -23,8 +26,13 @@ export default function RescheduleForm({ appointmentId, currentDate, currentDura
     initialState,
   );
 
-  const [appointmentDate, setAppointmentDate] = useState(toLocalDateTimeInput(currentDate));
+  const initial = splitDateTime(currentDate);
+  const [date, setDate] = useState(initial.date);
+  const [time, setTime] = useState(initial.time);
   const [durationInMin, setDurationInMin] = useState(currentDuration);
+
+  const today = new Date().toISOString().split("T")[0];
+  const appointmentDate = date && time ? `${date}T${time}` : "";
 
   useEffect(() => {
     if (state.success) {
@@ -40,15 +48,29 @@ export default function RescheduleForm({ appointmentId, currentDate, currentDura
       {state.error && <p className="text-red-600 text-sm">{state.error}</p>}
 
       <input type="hidden" name="id" value={appointmentId} />
+      <input type="hidden" name="appointmentDate" value={appointmentDate} />
 
       <label className="block">
-        New date and time
+        New date
         <input
-          name="appointmentDate"
-          type="datetime-local"
+          type="date"
           required
-          value={appointmentDate}
-          onChange={(e) => setAppointmentDate(e.target.value)}
+          min={today}
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </label>
+
+      <label className="block">
+        New time (between 8 AM and 6 PM)
+        <input
+          type="time"
+          required
+          min="08:00"
+          max="18:00"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
       </label>

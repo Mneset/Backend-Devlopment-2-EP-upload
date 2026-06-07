@@ -152,6 +152,95 @@ public class AppointmentControllerTests : IClassFixture<TestWebAppFactory>
     }
 
     [Fact]
+    public async Task BookGuestAppointment_AsAnonymous_WithValidData_ReturnsCreated()
+    {
+        var request = new BookGuestAppointmentRequestDto
+        {
+            FirstName = "Walkin",
+            LastName = "Patient",
+            Gender = Gender.Female,
+            DateOfBirth = new DateTime(1995, 5, 5),
+            DoctorId = 2,
+            ClinicId = 2,
+            AppointmentCategoryId = 1,
+            AppointmentDate = new DateTime(2026, 12, 5, 10, 0, 0),
+            DurationInMin = 30
+        };
+
+        var response = await _client.PostAsJsonAsync("/api/v1/appointments/guest", request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        var appointment = await response.Content.ReadFromJsonAsync<AppointmentResponseDto>(TestWebAppFactory.JsonOptions);
+        appointment!.PatientFirstName.Should().Be("Walkin");
+        appointment.PatientLastName.Should().Be("Patient");
+        appointment.DoctorId.Should().Be(2);
+        appointment.Status.Should().Be(Status.Scheduled);
+    }
+
+    [Fact]
+    public async Task BookGuestAppointment_WithDoctorClinicMismatch_ReturnsBadRequest()
+    {
+        var request = new BookGuestAppointmentRequestDto
+        {
+            FirstName = "Walkin",
+            LastName = "Patient",
+            Gender = Gender.Male,
+            DateOfBirth = new DateTime(1995, 5, 5),
+            DoctorId = 1,
+            ClinicId = 2,
+            AppointmentCategoryId = 1,
+            AppointmentDate = new DateTime(2026, 12, 5, 10, 0, 0),
+            DurationInMin = 30
+        };
+
+        var response = await _client.PostAsJsonAsync("/api/v1/appointments/guest", request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task BookGuestAppointment_WithFutureDateOfBirth_ReturnsBadRequest()
+    {
+        var request = new BookGuestAppointmentRequestDto
+        {
+            FirstName = "Walkin",
+            LastName = "Patient",
+            Gender = Gender.Male,
+            DateOfBirth = new DateTime(3000, 1, 1),
+            DoctorId = 1,
+            ClinicId = 1,
+            AppointmentCategoryId = 1,
+            AppointmentDate = new DateTime(2026, 12, 5, 10, 0, 0),
+            DurationInMin = 30
+        };
+
+        var response = await _client.PostAsJsonAsync("/api/v1/appointments/guest", request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task BookGuestAppointment_WithMissingName_ReturnsBadRequest()
+    {
+        var request = new BookGuestAppointmentRequestDto
+        {
+            FirstName = "",
+            LastName = "Patient",
+            Gender = Gender.Male,
+            DateOfBirth = new DateTime(1990, 1, 1),
+            DoctorId = 1,
+            ClinicId = 1,
+            AppointmentCategoryId = 1,
+            AppointmentDate = new DateTime(2026, 12, 5, 10, 0, 0),
+            DurationInMin = 30
+        };
+
+        var response = await _client.PostAsJsonAsync("/api/v1/appointments/guest", request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
     public async Task BookAppointment_WithDoctorClinicMismatch_ReturnsBadRequest()
     {
         await LoginAsJonasAsync();
