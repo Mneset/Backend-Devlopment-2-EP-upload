@@ -1,9 +1,19 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/auth";
 import { getMyProfile } from "@/services/patientService";
 import DeactivateButton from "@/components/DeactivateButton";
 import ProfileForm from "./ProfileForm";
+import type { Role } from "@/types/auth";
 
 export default async function ProfilePage() {
+  const cookieStore = await cookies();
+  const role = cookieStore.get("role")?.value as Role | undefined;
+
+  if (role !== "Patient") {
+    redirect("/login");
+  }
+
   const token = await requireAuth();
   const profile = await getMyProfile(token);
 

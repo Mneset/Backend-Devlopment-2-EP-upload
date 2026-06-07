@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/auth";
 import { getMyAppointments } from "@/services/appointmentService";
 import type { Status } from "@/types/appointment";
+import type { Role } from "@/types/auth";
 
 const FILTERS: { label: string; value: Status | "All" }[] = [
   { label: "All", value: "All" },
@@ -15,6 +18,13 @@ export default async function BookingsPage({
 }: {
   searchParams: Promise<{ status?: string }>;
 }) {
+  const cookieStore = await cookies();
+  const role = cookieStore.get("role")?.value as Role | undefined;
+
+  if (role !== "Patient") {
+    redirect("/login");
+  }
+
   const token = await requireAuth();
   const appointments = await getMyAppointments(token);
   const { status } = await searchParams;

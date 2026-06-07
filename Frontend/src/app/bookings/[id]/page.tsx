@@ -1,14 +1,24 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/auth";
 import { getAppointmentById } from "@/services/appointmentService";
 import CancelAppointmentButton from "@/components/CancelAppointmentButton";
 import RescheduleForm from "@/components/RescheduleForm";
+import type { Role } from "@/types/auth";
 
 export default async function BookingDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const cookieStore = await cookies();
+  const role = cookieStore.get("role")?.value as Role | undefined;
+
+  if (role !== "Patient") {
+    redirect("/login");
+  }
+
   const token = await requireAuth();
   const { id } = await params;
   const appointment = await getAppointmentById(Number(id), token);
