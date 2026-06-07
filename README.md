@@ -289,5 +289,6 @@ AI assistance was used to help with the following parts of the project:
 - **Tailwind CSS** — help choosing class combinations for styling.
 - **Regex patterns** — help drafting the validation regexes for SSN, tax / license / insurance numbers, and password complexity.
 - **Backend integration tests** — help applying the same test pattern across the controller tests once the shape was established.
+- **Seed data** — help generating the bulk seed entries (additional doctors, patients and appointments) once the shape and constraints were established.
 - **Frontend** — help applying the same pattern across the copy-and-paste-heavy CRUD pages, forms and services once the shape was established.
 - **This README** — help structuring the sections and tightening the wording.

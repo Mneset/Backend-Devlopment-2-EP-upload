@@ -96,6 +96,215 @@ namespace ClinicAPI.Migrations
                             DurationInMin = 60,
                             PatientId = 1,
                             Status = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 6, 15, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 2,
+                            DoctorId = 5,
+                            DurationInMin = 30,
+                            PatientId = 1,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AppointmentCategoryId = 2,
+                            AppointmentDate = new DateTime(2026, 6, 20, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 1,
+                            DoctorId = 1,
+                            DurationInMin = 45,
+                            PatientId = 4,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 6, 25, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 1,
+                            DoctorId = 8,
+                            DurationInMin = 30,
+                            PatientId = 5,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AppointmentCategoryId = 3,
+                            AppointmentDate = new DateTime(2026, 7, 2, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 3,
+                            DoctorId = 11,
+                            DurationInMin = 60,
+                            PatientId = 6,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 7, 10, 13, 30, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 5,
+                            DoctorId = 9,
+                            DurationInMin = 30,
+                            PatientId = 7,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AppointmentCategoryId = 4,
+                            AppointmentDate = new DateTime(2026, 7, 15, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 4,
+                            DoctorId = 4,
+                            DurationInMin = 15,
+                            PatientId = 8,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AppointmentCategoryId = 5,
+                            AppointmentDate = new DateTime(2026, 7, 20, 10, 30, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 2,
+                            DoctorId = 2,
+                            DurationInMin = 30,
+                            PatientId = 9,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AppointmentCategoryId = 2,
+                            AppointmentDate = new DateTime(2026, 5, 15, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 1,
+                            DoctorId = 12,
+                            DurationInMin = 45,
+                            PatientId = 4,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 4, 10, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 2,
+                            DoctorId = 10,
+                            DurationInMin = 30,
+                            PatientId = 2,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AppointmentCategoryId = 5,
+                            AppointmentDate = new DateTime(2026, 3, 15, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 5,
+                            DoctorId = 6,
+                            DurationInMin = 45,
+                            PatientId = 5,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 2, 20, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 1,
+                            DoctorId = 1,
+                            DurationInMin = 30,
+                            PatientId = 1,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 15,
+                            AppointmentCategoryId = 3,
+                            AppointmentDate = new DateTime(2026, 1, 15, 13, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 4,
+                            DoctorId = 4,
+                            DurationInMin = 60,
+                            PatientId = 6,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 16,
+                            AppointmentCategoryId = 4,
+                            AppointmentDate = new DateTime(2026, 4, 25, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 4,
+                            DoctorId = 7,
+                            DurationInMin = 15,
+                            PatientId = 8,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 17,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 5, 5, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 2,
+                            DoctorId = 5,
+                            DurationInMin = 30,
+                            PatientId = 7,
+                            Status = 2
+                        },
+                        new
+                        {
+                            Id = 18,
+                            AppointmentCategoryId = 2,
+                            AppointmentDate = new DateTime(2026, 6, 28, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 3,
+                            DoctorId = 11,
+                            DurationInMin = 45,
+                            PatientId = 9,
+                            Status = 2
+                        },
+                        new
+                        {
+                            Id = 19,
+                            AppointmentCategoryId = 5,
+                            AppointmentDate = new DateTime(2026, 4, 18, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 3,
+                            DoctorId = 3,
+                            DurationInMin = 30,
+                            PatientId = 2,
+                            Status = 2
+                        },
+                        new
+                        {
+                            Id = 20,
+                            AppointmentCategoryId = 4,
+                            AppointmentDate = new DateTime(2026, 6, 12, 11, 30, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 4,
+                            DoctorId = 4,
+                            DurationInMin = 15,
+                            PatientId = 10,
+                            Status = 0
+                        },
+                        new
+                        {
+                            Id = 21,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 4, 1, 9, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 2,
+                            DoctorId = 2,
+                            DurationInMin = 30,
+                            PatientId = 11,
+                            Status = 1
+                        },
+                        new
+                        {
+                            Id = 22,
+                            AppointmentCategoryId = 1,
+                            AppointmentDate = new DateTime(2026, 6, 30, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            ClinicId = 5,
+                            DoctorId = 6,
+                            DurationInMin = 30,
+                            PatientId = 12,
+                            Status = 0
                         });
                 });
 
@@ -271,6 +480,86 @@ namespace ClinicAPI.Migrations
                             IsActive = true,
                             LastName = "Dahl",
                             SpecialityId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ClinicId = 2,
+                            FirstName = "Olav",
+                            Gender = 0,
+                            IsActive = true,
+                            LastName = "Lund",
+                            SpecialityId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ClinicId = 5,
+                            FirstName = "Ingrid",
+                            Gender = 1,
+                            IsActive = true,
+                            LastName = "Solberg",
+                            SpecialityId = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ClinicId = 4,
+                            FirstName = "Maria",
+                            Gender = 1,
+                            IsActive = true,
+                            LastName = "Strand",
+                            SpecialityId = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ClinicId = 1,
+                            FirstName = "Henrik",
+                            Gender = 0,
+                            IsActive = true,
+                            LastName = "Vik",
+                            SpecialityId = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ClinicId = 5,
+                            FirstName = "Astrid",
+                            Gender = 1,
+                            IsActive = true,
+                            LastName = "Bakke",
+                            SpecialityId = 3
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ClinicId = 2,
+                            FirstName = "Tor",
+                            Gender = 0,
+                            IsActive = true,
+                            LastName = "Iversen",
+                            SpecialityId = 4
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ClinicId = 3,
+                            FirstName = "Linnea",
+                            Gender = 1,
+                            IsActive = true,
+                            LastName = "Holm",
+                            SpecialityId = 4
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ClinicId = 1,
+                            FirstName = "Magnus",
+                            Gender = 0,
+                            IsActive = true,
+                            LastName = "Eide",
+                            SpecialityId = 3
                         });
                 });
 
@@ -361,6 +650,126 @@ namespace ClinicAPI.Migrations
                             IsActive = true,
                             IsRegistered = false,
                             LastName = "User"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DateOfBirth = new DateTime(1988, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10004",
+                            FirstName = "Henrik",
+                            Gender = 0,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Aas",
+                            MedicalInsuranceNumber = "MI10004",
+                            Religion = 0,
+                            SocialSecurityNumber = "12048812345",
+                            TaxNumber = "TX10004"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DateOfBirth = new DateTime(1995, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10005",
+                            FirstName = "Kari",
+                            Gender = 1,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Solheim",
+                            MedicalInsuranceNumber = "MI10005",
+                            Religion = 6,
+                            SocialSecurityNumber = "03119512345",
+                            TaxNumber = "TX10005"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            DateOfBirth = new DateTime(1972, 7, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10006",
+                            FirstName = "Ola",
+                            Gender = 0,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Lien",
+                            MedicalInsuranceNumber = "MI10006",
+                            Religion = 7,
+                            SocialSecurityNumber = "28077212345",
+                            TaxNumber = "TX10006"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            DateOfBirth = new DateTime(1992, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10007",
+                            FirstName = "Ingvild",
+                            Gender = 1,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Moen",
+                            MedicalInsuranceNumber = "MI10007",
+                            Religion = 5,
+                            SocialSecurityNumber = "19029212345",
+                            TaxNumber = "TX10007"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            DateOfBirth = new DateTime(1980, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10008",
+                            FirstName = "Sven",
+                            Gender = 0,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Berge",
+                            MedicalInsuranceNumber = "MI10008",
+                            Religion = 0,
+                            SocialSecurityNumber = "05098012345",
+                            TaxNumber = "TX10008"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            DateOfBirth = new DateTime(1998, 12, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DriverLicenseNumber = "DL10009",
+                            FirstName = "Astrid",
+                            Gender = 1,
+                            IsActive = true,
+                            IsRegistered = true,
+                            LastName = "Kvam",
+                            MedicalInsuranceNumber = "MI10009",
+                            Religion = 6,
+                            SocialSecurityNumber = "30129812345",
+                            TaxNumber = "TX10009"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            DateOfBirth = new DateTime(1965, 3, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Per",
+                            Gender = 0,
+                            IsActive = true,
+                            IsRegistered = false,
+                            LastName = "Walk-in"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            DateOfBirth = new DateTime(1978, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Lisa",
+                            Gender = 1,
+                            IsActive = true,
+                            IsRegistered = false,
+                            LastName = "Visitor"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            DateOfBirth = new DateTime(2002, 6, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Thomas",
+                            Gender = 0,
+                            IsActive = true,
+                            IsRegistered = false,
+                            LastName = "Drop-in"
                         });
                 });
 
@@ -463,6 +872,54 @@ namespace ClinicAPI.Migrations
                             Email = "guest@email.com",
                             PatientId = 3,
                             Role = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Email = "henrik@email.com",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
+                            PatientId = 4,
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Email = "kari@email.com",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
+                            PatientId = 5,
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Email = "ola@email.com",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
+                            PatientId = 6,
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Email = "ingvild@email.com",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
+                            PatientId = 7,
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Email = "sven@email.com",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
+                            PatientId = 8,
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Email = "astrid@email.com",
+                            PasswordHash = "$2a$11$kaXznudJD90DTmdfrDexeOhjwZkhE06T0EAPLVooywIXndkYY90tK",
+                            PatientId = 9,
+                            Role = 1
                         });
                 });
 
