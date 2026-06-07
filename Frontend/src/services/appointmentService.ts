@@ -1,5 +1,5 @@
 import { API_URL } from "@/lib/constants";
-import type { AppointmentResponseDto, BookAppointmentRequestDto, BookGuestAppointmentRequestDto, RescheduleAppointmentRequestDto } from "@/types/appointment";
+import type { AppointmentResponseDto, BookAppointmentRequestDto, BookGuestAppointmentRequestDto, RescheduleAppointmentRequestDto, Status } from "@/types/appointment";
 
 export async function bookGuestAppointment(
   data: BookGuestAppointmentRequestDto,
@@ -93,6 +93,36 @@ export async function rescheduleAppointment(
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
+  });
+
+  return response.ok;
+}
+
+export async function getAllAppointments(
+  token: string,
+  status?: Status,
+): Promise<AppointmentResponseDto[] | null> {
+  const url = status
+    ? `${API_URL}/api/v1/appointments?status=${status}`
+    : `${API_URL}/api/v1/appointments`;
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return response.json();
+}
+
+export async function completeAppointment(
+  id: number,
+  token: string,
+): Promise<boolean> {
+  const response = await fetch(`${API_URL}/api/v1/appointments/${id}/complete`, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   return response.ok;

@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth";
-import { bookAppointment, bookGuestAppointment, cancelAppointment, rescheduleAppointment } from "@/services/appointmentService";
+import { bookAppointment, bookGuestAppointment, cancelAppointment, completeAppointment, rescheduleAppointment } from "@/services/appointmentService";
 import type { BookAppointmentRequestDto, BookGuestAppointmentRequestDto, RescheduleAppointmentRequestDto } from "@/types/appointment";
 import type { Gender } from "@/types/patient";
 
@@ -106,5 +106,45 @@ export async function rescheduleAppointmentAction(
 
   revalidatePath(`/bookings/${data.id}`);
   revalidatePath("/bookings");
+  return { success: true };
+}
+
+export async function adminCompleteAppointmentAction(formData: FormData) {
+  const token = await requireAuth();
+  const id = Number(formData.get("id"));
+
+  await completeAppointment(id, token);
+  revalidatePath(`/admin/appointments/${id}`);
+  revalidatePath("/admin/appointments");
+}
+
+export async function adminCancelAppointmentAction(formData: FormData) {
+  const token = await requireAuth();
+  const id = Number(formData.get("id"));
+
+  await cancelAppointment(id, token);
+  revalidatePath(`/admin/appointments/${id}`);
+  revalidatePath("/admin/appointments");
+}
+
+export async function adminRescheduleAppointmentAction(
+  _prevState: RescheduleState,
+  formData: FormData,
+): Promise<RescheduleState> {
+  const token = await requireAuth();
+
+  const data: RescheduleAppointmentRequestDto = {
+    id: Number(formData.get("id")),
+    appointmentDate: formData.get("appointmentDate") as string,
+    durationInMin: Number(formData.get("durationInMin")),
+  };
+
+  const ok = await rescheduleAppointment(data, token);
+  if (!ok) {
+    return { error: "Reschedule failed. The new time may overlap with another appointment." };
+  }
+
+  revalidatePath(`/admin/appointments/${data.id}`);
+  revalidatePath("/admin/appointments");
   return { success: true };
 }
