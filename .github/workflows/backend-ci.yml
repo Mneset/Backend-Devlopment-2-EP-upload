@@ -17,3 +17,16 @@ jobs:
       - run: dotnet restore ep-2-Mneset.sln
       - run: dotnet build ep-2-Mneset.sln --no-restore --configuration Release
       - run: dotnet test ep-2-Mneset.sln --no-build --configuration Release --verbosity normal
+  publish:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - run: docker build -t ghcr.io/mneset/clinicapi:latest -t ghcr.io/mneset/clinicapi:${{ github.sha }} Backend/ClinicAPI
+      - run: docker push --all-tags ghcr.io/mneset/clinicapi
+
