@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    volumes:
+      - clinic-db:/var/opt/mssql
+    restart: unless-stopped
+
+  api:
+    image: ghcr.io/mneset/clinicapi:latest
+    env_file: .env
+    depends_on:
+      - db
+    ports:
+      - "5080:8080"
+    restart: unless-stopped
+
+volumes:
+  clinic-db:

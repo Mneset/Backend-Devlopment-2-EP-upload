@@ -99,6 +99,10 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 // Configure JWT settings
 var jwtSettings = new JwtSettings();
 builder.Configuration.GetSection("JwtSettings").Bind(jwtSettings);
+
+if (string.IsNullOrWhiteSpace(jwtSettings.SecretKey))
+    throw new InvalidOperationException("JwtSettings:SecretKey is not configured.");
+
 builder.Services.AddSingleton(jwtSettings);
 
 builder.Services

@@ -22,6 +22,8 @@ public class TestWebAppFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseSetting("JwtSettings:SecretKey", "test-only-secret-key-for-integration-tests-0123456789");
+
         builder.ConfigureServices(services =>
         {
             var descriptor = services.SingleOrDefault(
