@@ -25,7 +25,7 @@ export async function loginAction(
   const cookieStore = await cookies();
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production" && process.env.COOKIE_SECURE !== "false",
     sameSite: "lax" as const,
     path: "/",
     expires: new Date(result.expiresAt),
@@ -85,7 +85,7 @@ export async function registerAction(
   const cookieStore = await cookies();
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production" && process.env.COOKIE_SECURE !== "false",
     sameSite: "lax" as const,
     path: "/",
     expires: new Date(tokenResponse.expiresAt),

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/auth";
+import { isInFuture } from "@/lib/date";
 import { getAppointmentById } from "@/services/appointmentService";
 import CancelAppointmentButton from "@/components/CancelAppointmentButton";
 import RescheduleForm from "@/components/RescheduleForm";
@@ -32,7 +33,7 @@ export default async function BookingDetailPage({
     );
   }
 
-  const isFuture = new Date(appointment.appointmentDate).getTime() > Date.now();
+  const isFuture = isInFuture(appointment.appointmentDate);
   const canModify = appointment.status === "Scheduled" && isFuture;
 
   return (

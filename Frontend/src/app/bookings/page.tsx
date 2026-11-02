@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/auth";
+import { isInFuture } from "@/lib/date";
 import { getMyAppointments } from "@/services/appointmentService";
 import type { Status } from "@/types/appointment";
 import type { Role } from "@/types/auth";
@@ -42,9 +43,8 @@ export default async function BookingsPage({
       ? appointments.filter((a) => a.status === status)
       : appointments;
 
-  const now = Date.now();
   const nextAppointment = appointments
-    .filter((a) => a.status === "Scheduled" && new Date(a.appointmentDate).getTime() > now)
+    .filter((a) => a.status === "Scheduled" && isInFuture(a.appointmentDate))
     .sort(
       (a, b) =>
         new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime(),

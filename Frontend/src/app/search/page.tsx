@@ -1,7 +1,9 @@
+import { connection } from "next/server";
 import { getAllDoctors } from "@/services/doctorService";
 import DoctorSearch from "@/components/DoctorSearch";
 
 export default async function SearchPage() {
+  await connection();
   const doctors = await getAllDoctors();
 
   if (doctors === null) {
