@@ -33,7 +33,7 @@ public class SpecialityControllerTests : IClassFixture<TestWebAppFactory>
     public async Task GetAllSpecialities_AsAnonymous_ReturnsSeededSpecialities()
     {
         var response = await _client.GetAsync("/api/v1/specialities");
-
+        Assert.True(false);
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var specialities = await response.Content.ReadFromJsonAsync<List<SpecialityResponseDto>>(TestWebAppFactory.JsonOptions);
         specialities.Should().HaveCount(5);
