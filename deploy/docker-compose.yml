@@ -21,7 +21,6 @@ services:
     image: ghcr.io/mneset/clinicfrontend:latest
     environment:
       BACKEND_API_URL: http://api:8080
-      COOKIE_SECURE: "false"
     depends_on:
       - api
     ports:
