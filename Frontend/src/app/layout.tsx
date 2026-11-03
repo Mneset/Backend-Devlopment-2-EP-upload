@@ -48,9 +48,10 @@ export default function RootLayout({
           </nav>
         </header>
 
-        <main className="pt-14 pb-12">{children}</main>
+        <main className="pt-14 pb-20">{children}</main>
 
         <footer className="fixed bottom-0 left-0 right-0 bg-cyan-600 text-white text-center p-3 text-sm">
+          <p>Demo: all data resets every night. Do not enter real personal information.</p>
           <p>&copy; 2026</p>
         </footer>
       </body>

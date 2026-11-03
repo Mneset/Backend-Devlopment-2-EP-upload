@@ -51,6 +51,13 @@ export default function LoginPage() {
         >
           {pending ? "Logging in..." : "Log in"}
         </button>
+
+        <div className="text-sm text-gray-600 border-t pt-4">
+          <p className="font-medium mb-1">Demo accounts</p>
+          <p>Admin: admin@clinic.com / Admin123</p>
+          <p>Patient: jonas@email.com / Patient123</p>
+          <p>Patient: marie@email.com / Patient123</p>
+        </div>
       </form>
     </div>
   );
