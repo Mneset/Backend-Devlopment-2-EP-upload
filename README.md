@@ -1,6 +1,17 @@
 # Clinic API
 
+![Backend CI](https://github.com/Mneset/Backend-Devlopment-2-EP-upload/actions/workflows/backend-ci.yml/badge.svg)
+![Frontend CI](https://github.com/Mneset/Backend-Devlopment-2-EP-upload/actions/workflows/frontend-ci.yml/badge.svg)
+
 A full-stack exam project for managing a clinic's clinics, doctors, specialities, appointment categories, patients, and appointments. ASP.NET Core 10 Web API + Next.js 16 frontend with JWT authentication.
+
+## Live Demo
+
+**[https://macserver.tail9271f5.ts.net:8443](https://macserver.tail9271f5.ts.net:8443)**
+
+Try the app without setting anything up. The demo accounts are listed on the login page and under [Default Credentials](#default-credentials). They are public on purpose, including the admin account, so that every part of the app can be tried.
+
+All data resets to the original seed data every night. Do not enter real personal information.
 
 ## Project Structure
 
@@ -18,7 +29,7 @@ Backend/
     Program.cs           DI, Swagger, JWT, CORS, pipeline
   ClinicAPI.Tests/       Integration tests (xUnit)
 
-frontend/                Next.js 16 + TypeScript + Tailwind
+Frontend/                Next.js 16 + TypeScript + Tailwind
   src/
     app/                 Pages (App Router)
       admin/             Admin CRUD pages
@@ -32,6 +43,9 @@ frontend/                Next.js 16 + TypeScript + Tailwind
     modules/             Server actions
     types/               Types mirroring backend DTOs
     lib/                 Auth guard + utilities
+
+deploy/                  Docker Compose file and env template for the server
+.github/                 CI/CD workflows and Dependabot config
 ```
 
 ## Setup and Run
@@ -40,35 +54,37 @@ frontend/                Next.js 16 + TypeScript + Tailwind
 
 - .NET 10 SDK
 - Node.js 20+ and npm
-- SQL Server (the default connection string targets `localhost:1433` with `sa` / `@Admin123`)
-- `dotnet-ef` tool: `dotnet tool install --global dotnet-ef`
+- SQL Server
+- `dotnet-ef` tool, only needed to create new migrations: `dotnet tool install --global dotnet-ef`
 
 ### Backend
 
-1. Update the connection string in [Backend/ClinicAPI/appsettings.json](Backend/ClinicAPI/appsettings.json) if your SQL Server is elsewhere.
-2. Create and seed the database:
+Secrets are not stored in the repo. `appsettings.json` keeps the setting names with empty values, and the API refuses to start without a JWT key.
+
+1. Set your local secrets:
    ```bash
    cd Backend/ClinicAPI
-   dotnet ef database update
+   dotnet user-secrets set "JwtSettings:SecretKey" "<random key, at least 32 characters>"
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=ClinicDb;User Id=sa;Password=<your password>;TrustServerCertificate=true;"
    ```
-3. Run the API:
+2. Run the API:
    ```bash
    dotnet run
    ```
-   It listens on `http://localhost:5074`.
+   It creates and seeds the database on startup and listens on `http://localhost:5074`.
 
 ### Frontend
 
 ```bash
-cd frontend
+cd Frontend
 npm install
 npm run dev
 ```
 
-The frontend runs on `http://localhost:3000` and expects the backend at `http://localhost:5074`. To point it elsewhere, create `frontend/.env.local`:
+The frontend runs on `http://localhost:3000` and expects the backend at `http://localhost:5074`. To point it elsewhere, create `Frontend/.env.local`:
 
 ```
-NEXT_PUBLIC_BACKEND_API_URL=http://localhost:5074
+BACKEND_API_URL=http://localhost:5074
 ```
 
 ### Default Credentials
@@ -109,6 +125,30 @@ start coverage/index.html
 `reportgenerator` is a global tool: install once with `dotnet tool install --global dotnet-reportgenerator-globaltool`.
 
 The frontend is not currently covered by automated tests.
+
+## CI/CD and Deployment
+
+Every push to `main` runs through the same chain. Pull requests stop after the checks and never publish an image.
+
+```
+push to main
+  -> Backend CI:  build + 140 xUnit tests  -> publish image to GHCR
+  -> Frontend CI: lint + build             -> publish image to GHCR
+
+Linux server (cron, every 5 minutes)
+  -> docker compose pull + up -d
+  -> replaces a container only when its image has changed
+```
+
+- **Path filters:** each workflow runs only when its part of the repo changes.
+- **Supply chain:** GitHub Actions are pinned to commit SHAs and kept up to date by Dependabot.
+- **Pull-based deploy:** the server fetches published images itself, so GitHub never runs code on it. This matters because the repo is public.
+- **Containers:** multi-stage Docker builds, running as non-root users.
+- **Secrets:** stored in a `.env` file on the server only. See [deploy/.env.example](deploy/.env.example). They are never in the repo or the images.
+- **Public access:** Tailscale Funnel provides HTTPS and exposes the frontend only. The API and database stay private.
+- **Demo reset:** a nightly cron job deletes the database volume. The API then recreates and seeds the database on startup.
+
+Cron updates images, not the Compose file. Changes to [deploy/docker-compose.yml](deploy/docker-compose.yml) must be copied to the server by hand.
 
 ## Endpoints
 
@@ -292,3 +332,4 @@ AI assistance was used to help with the following parts of the project:
 - **Seed data** — help generating the bulk seed entries (additional doctors, patients and appointments) once the shape and constraints were established.
 - **Frontend** — help applying the same pattern across the copy-and-paste-heavy CRUD pages, forms and services once the shape was established.
 - **This README** — help structuring the sections and tightening the wording.
+- **CI/CD and deployment** — built with Claude Code as a sparring partner: planning the pipeline, Docker and Compose files, and debugging the server setup.
