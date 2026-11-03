@@ -17,5 +17,16 @@ services:
       - "5080:8080"
     restart: unless-stopped
 
+  web:
+    image: ghcr.io/mneset/clinicfrontend:latest
+    environment:
+      BACKEND_API_URL: http://api:8080
+      COOKIE_SECURE: "false"
+    depends_on:
+      - api
+    ports:
+      - "5081:3000"
+    restart: unless-stopped
+
 volumes:
   clinic-db:
