@@ -17,3 +17,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url("/welcome-consult-CC9TlSeg.jpg") center / cover no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
+}
