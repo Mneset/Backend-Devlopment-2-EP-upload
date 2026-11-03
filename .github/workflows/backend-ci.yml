@@ -3,8 +3,10 @@ name: Backend CI
 on:
   push:
     branches: [main]
+    paths: ['Backend/**', 'ep-2-Mneset.sln', 'coverlet.runsettings', '.github/workflows/backend-ci.yml']
   pull_request:
     branches: [main]
+    paths: ['Backend/**', 'ep-2-Mneset.sln', 'coverlet.runsettings', '.github/workflows/backend-ci.yml']
 
 jobs:
   test:
